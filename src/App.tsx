@@ -18,9 +18,9 @@ export const App: React.FC = () => {
   return (
     <WalletProvider>
       <BrowserRouter>
-        <div className="min-h-screen flex flex-col bg-arena-bg text-arena-text">
+        <div className="min-h-screen flex flex-col bg-arena-bg text-arena-text w-full overflow-x-hidden">
           <Navbar />
-          <main className="flex-1">
+          <main className="flex-1 w-full min-w-0 overflow-x-hidden">
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/arena" element={<ArenaPage />} />

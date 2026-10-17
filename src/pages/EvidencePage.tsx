@@ -79,7 +79,7 @@ export const EvidencePage: React.FC = () => {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10 w-full min-w-0 overflow-x-hidden">
       <div className="border-b border-arena-border pb-6">
         <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
           <FileCheck2 className="w-8 h-8 text-arena-accent" />
@@ -91,7 +91,7 @@ export const EvidencePage: React.FC = () => {
       </div>
 
       {/* Contract Verification Summary */}
-      <div className="bg-arena-card border border-arena-border rounded-xl p-6 space-y-4 shadow-sm">
+      <div className="bg-arena-card border border-arena-border rounded-xl p-4 sm:p-6 space-y-4 shadow-sm w-full min-w-0 max-w-full overflow-hidden">
         <h2 className="text-lg font-bold text-white flex items-center gap-2">
           <ShieldCheck className="w-5 h-5 text-arena-accent" />
           <span>Byte-Identical Intelligent Contracts</span>
@@ -100,7 +100,7 @@ export const EvidencePage: React.FC = () => {
           Source code was verified against on-chain code using JSON-RPC method <code className="bg-arena-surface px-1.5 py-0.5 rounded text-white">eth_getTransactionByHash</code> inspecting field <code className="bg-arena-surface px-1.5 py-0.5 rounded text-white">result.data.contract_code</code> (base64 decoded).
         </p>
 
-        <div className="overflow-x-auto">
+        <div className="w-full max-w-full overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
               <tr className="border-b border-arena-border text-arena-muted uppercase font-mono">
@@ -180,7 +180,7 @@ export const EvidencePage: React.FC = () => {
       </div>
 
       {/* On-Chain Adversarial Attempts from Part A */}
-      <div className="bg-arena-card border border-arena-border rounded-xl p-6 space-y-4 shadow-sm">
+      <div className="bg-arena-card border border-arena-border rounded-xl p-4 sm:p-6 space-y-4 shadow-sm w-full min-w-0 max-w-full overflow-hidden">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-bold text-white flex items-center gap-2">
             <Layers className="w-5 h-5 text-arena-accent" />
@@ -191,7 +191,7 @@ export const EvidencePage: React.FC = () => {
           </span>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="w-full max-w-full overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
               <tr className="border-b border-arena-border text-arena-muted uppercase font-mono">
@@ -244,12 +244,12 @@ export const EvidencePage: React.FC = () => {
       </div>
 
       {/* GuardGate Output Filter Empirical Requests */}
-      <div className="bg-arena-card border border-arena-border rounded-xl p-6 space-y-4 shadow-sm">
+      <div className="bg-arena-card border border-arena-border rounded-xl p-4 sm:p-6 space-y-4 shadow-sm w-full min-w-0 max-w-full overflow-hidden">
         <h2 className="text-lg font-bold text-white flex items-center gap-2">
           <Scale className="w-5 h-5 text-arena-accent" />
           <span>GuardGate Deterministic Output Filter Proof</span>
         </h2>
-        <div className="overflow-x-auto">
+        <div className="w-full max-w-full overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
               <tr className="border-b border-arena-border text-arena-muted uppercase font-mono">
