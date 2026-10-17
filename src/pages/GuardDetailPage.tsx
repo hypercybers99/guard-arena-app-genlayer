@@ -361,23 +361,28 @@ export const GuardDetailPage: React.FC = () => {
                       <div className="text-xs text-amber-200">
                         This breach is unconfirmed. A second consensus verification round is required to confirm the breach or mark it FLAKY.
                       </div>
-                      <button
-                        onClick={() => handleReverify(att.n)}
-                        disabled={reverifyingAttemptN === att.n}
-                        className="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-lg shadow-amber-500/20 shrink-0"
-                      >
-                        {reverifyingAttemptN === att.n ? (
-                          <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            <span>Re-verifying in Consensus...</span>
-                          </>
-                        ) : (
-                          <>
-                            <RefreshCw className="w-3.5 h-3.5" />
-                            <span>Re-verify This Breach</span>
-                          </>
-                        )}
-                      </button>
+                      <div className="flex flex-col items-end gap-1 w-full sm:w-auto">
+                        <button
+                          onClick={() => handleReverify(att.n)}
+                          disabled={reverifyingAttemptN === att.n}
+                          className="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-lg shadow-amber-500/20 shrink-0"
+                        >
+                          {reverifyingAttemptN === att.n ? (
+                            <>
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              <span>Re-verifying in Consensus...</span>
+                            </>
+                          ) : (
+                            <>
+                              <RefreshCw className="w-3.5 h-3.5" />
+                              <span>Re-verify This Breach</span>
+                            </>
+                          )}
+                        </button>
+                        <span className="text-[10px] text-arena-muted text-center sm:text-right block">
+                          Studionet-only throwaway key. Preview network, no real value.
+                        </span>
+                      </div>
                     </div>
                   )}
 

@@ -62,28 +62,33 @@ export const GuardCard: React.FC<GuardCardProps> = ({ guard }) => {
           </p>
         </div>
 
-        {/* Forbidden Token Toggle */}
-        <div className="flex items-center justify-between text-xs mb-4 bg-black/20 px-3 py-2 rounded-lg border border-arena-border/40">
-          <span className="text-arena-muted">Forbidden Secret Token:</span>
-          <div className="flex items-center gap-2">
-            {showToken ? (
-              <span className="font-mono font-bold text-arena-accent bg-arena-primary/20 px-2 py-0.5 rounded border border-arena-primary/40">
-                {guard.token}
-              </span>
-            ) : (
-              <span className="font-mono text-arena-muted tracking-widest select-none">
-                ********
-              </span>
-            )}
-            <button
-              onClick={() => setShowToken(!showToken)}
-              className="text-arena-muted hover:text-white p-1 rounded transition-colors"
-              title={showToken ? 'Hide token' : 'Reveal forbidden token'}
-              aria-label={showToken ? 'Hide token' : 'Reveal forbidden token'}
-            >
-              {showToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
+        {/* Forbidden Token Toggle & Disclaimer */}
+        <div className="space-y-1 mb-4">
+          <div className="flex items-center justify-between text-xs bg-black/20 px-3 py-2 rounded-lg border border-arena-border/40">
+            <span className="text-arena-muted">Forbidden Secret Token:</span>
+            <div className="flex items-center gap-2">
+              {showToken ? (
+                <span className="font-mono font-bold text-arena-accent bg-arena-primary/20 px-2 py-0.5 rounded border border-arena-primary/40">
+                  {guard.token}
+                </span>
+              ) : (
+                <span className="font-mono text-arena-muted tracking-widest select-none">
+                  ********
+                </span>
+              )}
+              <button
+                onClick={() => setShowToken(!showToken)}
+                className="text-arena-muted hover:text-white p-1 rounded transition-colors"
+                title={showToken ? 'Hide token' : 'Reveal forbidden token'}
+                aria-label={showToken ? 'Hide token' : 'Reveal forbidden token'}
+              >
+                {showToken ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
+          <p className="text-[10px] text-arena-muted/80 leading-normal px-1">
+            the token is public on-chain by design on Studionet; this toggle only hides it visually
+          </p>
         </div>
 
         {/* Attempt Counters */}

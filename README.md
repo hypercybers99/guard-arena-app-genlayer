@@ -37,7 +37,7 @@ Every contract write method has a dedicated interactive UI caller:
 4. **Attack (`/attack`, `/attack/:targetId`)**: Interactive attack launcher. Pick target guard, write adversarial prompt, submit to consensus via `attempt_breach()`. Renders real-time consensus progress bar (signing, submitting, validator voting, agree/total votes tally).
 5. **Register Guard (`/register`)**: Form with guard name, defender policy, token dropdown from the fixed 64 allowed common words, and optional `parent_guard_id` (only valid for CONFIRMED breached parents). Includes explicit warning explaining that registration will revert if the guard fails naive baseline or utility probes.
 6. **Leaderboard (`/leaderboard`)**: Top defense guards ranked by robustness score, and top red-team attackers ranked by confirmed breaches.
-7. **GuardGate Demo (`/gate`)**: Interactive consumer demo. Pick an active guard, submit a question, call `ask_guard()`. Displays returned assistant reply and filter badge showing whether GuardGate's deterministic output filter caught and redacted a token.
+7. **GuardGate Demo (`/gate`)**: Interactive consumer demo. Pick an active guard, submit a question, call `ask()`. Displays returned assistant reply and filter badge showing whether GuardGate's deterministic output filter caught and blocked a token.
 8. **Evidence (`/evidence`)**: Embedded empirical evidence log displaying verified contract SHA-256 hashes, active addresses, all Part A on-chain attempts with explorer links, real agree/total votes, and execution latencies.
 9. **Wallet / Funding (`/wallet`)**: In-browser throwaway key generator, key importer/exporter, address copy button, balance query, and direct link to the GenLayer Studionet faucet.
 
@@ -53,12 +53,42 @@ npm run check
 `npm run check` executes:
 1. `npm run check:reference`: Verifies that `contracts-reference/` is byte-identical to pinned canonical hashes.
 2. `npm run build`: Type-checks (`tsc -b`) and builds production distribution (`vite build`).
-3. `npm run test`: Executes Vitest test suite (`tests/unit/`).
+3. `npm run test`: Executes Vitest test suite (`tests/unit/`, 61 tests across 9 suites).
 4. `npm run scan:ascii`: Enforces pure ASCII across all source files.
 5. `npm run scan:banned`: Scans for prohibited terminology.
 6. `npm run scan:secrets`: Ensures zero private keys or secrets are committed.
 7. `npm run check:address`: Ensures superseded addresses never leak into source code or docs.
 8. `npm run verify:bundle`: Audits the production bundle in `dist/`.
+
+### Unit & Integration Test Suite (61 tests across 9 files)
+- `tests/unit/contractSignatures.test.ts`: Cross-checks all dApp contract calls and arities against AST parsed from `contracts-reference/*.py` (proved catching `ask_guard` vs `ask` and `get_meta` vs `get_stats`).
+- `tests/unit/revertMap.test.ts`: Verifies complete coverage of all 33 `gl.vm.UserError` instances across both reference contracts to friendly descriptions.
+- `tests/unit/tokenList.test.ts`: Enforces byte-level parity between dApp token list and contract's 64-word `TOKEN_WORDLIST`.
+- `tests/unit/txLifecycle.test.ts`: Tests SDK terminal/accepted/disagreed/timeout status code handling.
+- `tests/unit/readbackCompletion.test.ts`: Validates write methods complete only after readback confirmation.
+- `tests/unit/predicateParity.test.ts`: 26 tests verifying deterministic TypeScript vs Python `_check_breach` parity across edge cases.
+- `tests/unit/rpcErrorVsEmpty.test.ts`: Proves RPC transport errors return retryable errors rather than false "not found".
+- `tests/unit/predicate.test.ts`: Delimiter validation and preview tests.
+- `tests/unit/contracts.test.ts`: Address and chain definition sanity tests.
+
+### Production E2E Lifecycle Suite (10 steps)
+Run:
+```bash
+npm run test:e2e
+```
+Drives a real throwaway key through the complete on-chain lifecycle against the deployed Vercel application on GenLayer Studionet (Preview):
+1. Landing motion & prefers-reduced-motion assertion.
+2. Header & footer naming rules ("GenLayer Studionet (Preview)").
+3. Throwaway key initialization on `/wallet`.
+4. On-chain guard registration (`register_guard` passing 5 probes).
+5. `/arena` readback verification.
+6. Real adversarial attack submission (`attempt_breach`).
+7. `/guard/:id` attempt history and state readback.
+8. GuardGate consumer query (`ask`).
+9. Negative flow duplicate attack verification (friendly revert message).
+10. Mobile 390px zero horizontal overflow assertion across all 9 routes.
+
+Evidence saved to `docs/e2e_production_evidence.json` and screenshots to `docs/screens/`.
 
 ---
 

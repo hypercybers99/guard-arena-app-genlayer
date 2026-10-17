@@ -35,10 +35,36 @@ export const LandingPage: React.FC = () => {
     }
   }, [index, fullText]);
 
+  // IntersectionObserver scroll reveal
+  useEffect(() => {
+    const isReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const elements = document.querySelectorAll('.scroll-reveal');
+
+    if (isReduced) {
+      elements.forEach((el) => el.classList.add('revealed'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="space-y-16 pb-16">
       {/* Hero Section */}
-      <section className="relative pt-12 md:pt-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center space-y-8">
+      <section className="scroll-reveal relative pt-12 md:pt-20 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center space-y-8">
         {/* Glow backdrop */}
         <div className="absolute inset-0 -z-10 flex items-center justify-center opacity-30 pointer-events-none">
           <div className="w-[500px] h-[300px] bg-blue-600/30 blur-[120px] rounded-full" />
@@ -87,8 +113,8 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* 3 Short Steps Explanation */}
-      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center space-y-2 mb-10">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        <div className="scroll-reveal text-center space-y-2">
           <span className="text-xs uppercase font-mono tracking-widest text-arena-accent font-semibold">
             How It Works
           </span>
@@ -99,7 +125,7 @@ export const LandingPage: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Step 1 */}
-          <div className="bg-arena-card/80 border border-arena-border rounded-xl p-6 relative flex flex-col justify-between group hover:border-arena-primary/50 transition-colors">
+          <div className="scroll-reveal reveal-delay-100 bg-arena-card/80 border border-arena-border rounded-xl p-6 relative flex flex-col justify-between group hover:border-arena-primary/50 transition-colors">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-arena-accent font-mono font-bold text-lg">
                 01
@@ -116,7 +142,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Step 2 */}
-          <div className="bg-arena-card/80 border border-arena-border rounded-xl p-6 relative flex flex-col justify-between group hover:border-arena-primary/50 transition-colors">
+          <div className="scroll-reveal reveal-delay-200 bg-arena-card/80 border border-arena-border rounded-xl p-6 relative flex flex-col justify-between group hover:border-arena-primary/50 transition-colors">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-arena-accent font-mono font-bold text-lg">
                 02
@@ -133,7 +159,7 @@ export const LandingPage: React.FC = () => {
           </div>
 
           {/* Step 3 */}
-          <div className="bg-arena-card/80 border border-arena-border rounded-xl p-6 relative flex flex-col justify-between group hover:border-arena-primary/50 transition-colors">
+          <div className="scroll-reveal reveal-delay-300 bg-arena-card/80 border border-arena-border rounded-xl p-6 relative flex flex-col justify-between group hover:border-arena-primary/50 transition-colors">
             <div className="space-y-4">
               <div className="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-arena-accent font-mono font-bold text-lg">
                 03
@@ -152,7 +178,7 @@ export const LandingPage: React.FC = () => {
       </section>
 
       {/* Core Innovation Callout */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="scroll-reveal max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-gradient-to-r from-blue-950/40 via-slate-900 to-blue-950/40 border border-arena-border rounded-2xl p-6 sm:p-8 space-y-4 text-center">
           <Scale className="w-10 h-10 text-arena-accent mx-auto" />
           <h3 className="text-xl sm:text-2xl font-bold text-white">
@@ -175,3 +201,4 @@ export const LandingPage: React.FC = () => {
     </div>
   );
 };
+

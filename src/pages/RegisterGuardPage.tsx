@@ -27,21 +27,21 @@ export const RegisterGuardPage: React.FC = () => {
   const [policy, setPolicy] = useState('');
   const [token, setToken] = useState<string>(TOKEN_WORDLIST[0]);
   const [parentGuardId, setParentGuardId] = useState('');
-  const [breachedGuards, setBreachedGuards] = useState<GuardRecord[]>([]);
+  const [allGuards, setAllGuards] = useState<GuardRecord[]>([]);
 
   const [submitting, setSubmitting] = useState(false);
   const [txProgress, setTxProgress] = useState<TxProgressUpdate>({ stage: 'idle' });
 
   useEffect(() => {
-    async function loadBreachedGuards() {
+    async function loadAllGuards() {
       try {
         const all = await getAllGuards();
-        setBreachedGuards(all.filter((g) => g.status === 'BREACHED'));
+        setAllGuards(all);
       } catch (err) {
-        console.error('Failed to load breached guards for lineage selection:', err);
+        console.error('Failed to load guards for lineage selection:', err);
       }
     }
-    loadBreachedGuards();
+    loadAllGuards();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -171,36 +171,46 @@ export const RegisterGuardPage: React.FC = () => {
             <GitFork className="w-3.5 h-3.5 text-arena-accent" />
             <span>Parent Guard ID (Optional Lineage Hardening)</span>
           </label>
-          {breachedGuards.length > 0 ? (
+          {allGuards.length > 0 ? (
             <select
               value={parentGuardId}
               onChange={(e) => {
                 setParentGuardId(e.target.value);
-                const parent = breachedGuards.find((g) => g.guard_id === e.target.value);
+                const parent = allGuards.find((g) => g.guard_id === e.target.value);
                 if (parent) setToken(parent.token);
               }}
               disabled={submitting}
               className="w-full bg-arena-surface border border-arena-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-arena-primary font-mono cursor-pointer"
             >
               <option value="" className="bg-arena-card">None (Independent Root Guard)</option>
-              {breachedGuards.map((bg) => (
-                <option key={bg.guard_id} value={bg.guard_id} className="bg-arena-card">
-                  {bg.name} ({bg.guard_id}) - Token: {bg.token} [BREACHED]
-                </option>
-              ))}
+              {allGuards.map((g) => {
+                const isEligible = g.status === 'BREACHED';
+                return (
+                  <option
+                    key={g.guard_id}
+                    value={g.guard_id}
+                    disabled={!isEligible}
+                    className={isEligible ? 'bg-arena-card text-rose-300 font-semibold' : 'bg-arena-card opacity-50 text-slate-500'}
+                  >
+                    {isEligible
+                      ? `${g.name} (${g.guard_id}) - Token: ${g.token} [BREACHED - Eligible Parent]`
+                      : `${g.name} (${g.guard_id}) - [DISABLED: only guards with a CONFIRMED breach may be chosen as parent; this guard is active/unbreached]`}
+                  </option>
+                );
+              })}
             </select>
           ) : (
             <input
               type="text"
               value={parentGuardId}
               onChange={(e) => setParentGuardId(e.target.value)}
-              placeholder="Leave empty for root guard (only BREACHED guards can be parents)"
+              placeholder="Leave empty for root guard (only CONFIRMED BREACHED guards can be parents)"
               disabled={submitting}
               className="w-full bg-arena-surface border border-arena-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-arena-primary font-mono"
             />
           )}
-          <p className="text-xs text-arena-muted">
-            Lineage requirement: child guards inherit the exact token of their parent and can only be registered if the parent is CONFIRMED breached.
+          <p className="text-xs text-arena-muted leading-relaxed">
+            Lineage Rule: Only guards with a CONFIRMED breach (<span className="font-mono text-rose-300">status == 'BREACHED'</span>) may be chosen as parent; active/unbreached guards cannot be parented. Child guards inherit the exact token of their parent.
           </p>
         </div>
 
@@ -230,6 +240,9 @@ export const RegisterGuardPage: React.FC = () => {
             </>
           )}
         </button>
+        <p className="text-[11px] text-center text-arena-muted">
+          Studionet-only throwaway key. Preview network, no real value.
+        </p>
       </form>
     </div>
   );

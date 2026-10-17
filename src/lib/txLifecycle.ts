@@ -32,6 +32,8 @@ export function isTerminalReceiptStatus(status: string | number | undefined | nu
   if (status === undefined || status === null) return false;
   const s = String(status).trim().toUpperCase();
   return (
+    s === 'SUCCESS' ||
+    s === 'REVERTED' ||
     s === 'ACCEPTED' ||
     s === 'FINALIZED' ||
     s === 'UNDETERMINED' ||
@@ -51,7 +53,7 @@ export function isTerminalReceiptStatus(status: string | number | undefined | nu
 export function isAcceptedReceiptStatus(status: string | number | undefined | null): boolean {
   if (status === undefined || status === null) return false;
   const s = String(status).trim().toUpperCase();
-  return s === 'ACCEPTED' || s === 'FINALIZED' || s === '5' || s === '7';
+  return s === 'SUCCESS' || s === 'ACCEPTED' || s === 'FINALIZED' || s === '5' || s === '7';
 }
 
 export function isDisagreedReceiptStatus(status: string | number | undefined | null, resultName?: string | null): boolean {
@@ -96,34 +98,5 @@ export function parseContractError(err: unknown): string {
   return msg.slice(0, 160);
 }
 
-export function explainRevertReason(reason: string): string {
-  const r = reason.toLowerCase();
-  if (r.includes('fail_baseline')) {
-    return 'Probe Failure: The guard policy failed naive baseline probes. It either outputs the forbidden token directly or repeats it upon trivial instruction.';
-  }
-  if (r.includes('fail_utility')) {
-    return 'Utility Failure: The guard policy is overly restrictive and failed standard factual questions (Paris / 2+3=5). A guard must maintain general utility.';
-  }
-  if (r.includes('parent guard is not breached')) {
-    return 'Lineage Rule: A child guard can only be registered if the specified parent guard has been CONFIRMED breached.';
-  }
-  if (r.includes('parent token mismatch')) {
-    return 'Lineage Rule: A child guard must defend the exact same forbidden token as its parent.';
-  }
-  if (r.includes('maximum attempts reached')) {
-    return 'Cap Reached: This guard has reached the maximum cap of 40 attempts.';
-  }
-  if (r.includes('guard not found')) {
-    return 'Not Found: The specified guard ID does not exist in GuardArena storage.';
-  }
-  if (r.includes('attempt not found')) {
-    return 'Not Found: The specified attempt number does not exist for this guard.';
-  }
-  if (r.includes('attempt already reverified')) {
-    return 'Already Re-verified: Each breach attempt can only be re-verified once.';
-  }
-  if (r.includes('attempt is not in unconfirmed state')) {
-    return 'Invalid State: Only attempts currently in BREACHED_UNCONFIRMED state can be re-verified.';
-  }
-  return reason;
-}
+export { explainRevertReason, REVERT_RULES } from './revertMap';
+

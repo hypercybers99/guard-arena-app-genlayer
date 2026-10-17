@@ -8,6 +8,7 @@ import {
 import {
   countVotes,
   isTerminalReceiptStatus,
+  isAcceptedReceiptStatus,
   parseContractError,
   type ConsensusVotes,
 } from '../lib/txLifecycle';
@@ -118,7 +119,31 @@ export async function listGuardIds(offset = 0, limit = 50): Promise<string[]> {
   }
 }
 
-export async function getGuard(guardId: string): Promise<GuardRecord | null> {
+export type ContractQueryResult<T> =
+  | { status: 'success'; data: T; error?: never }
+  | { status: 'not_found'; data?: never; error: string }
+  | { status: 'rpc_error'; data?: never; error: string; canRetry: true };
+
+export function isRpcTransportError(err: unknown): boolean {
+  if (!err) return false;
+  const msg = (err instanceof Error ? err.message : String(err)).toLowerCase();
+  if (msg.includes('usererror') || msg.includes('guard not found') || msg.includes('request not found')) {
+    return false;
+  }
+  return (
+    msg.includes('fetch') ||
+    msg.includes('network') ||
+    msg.includes('timeout') ||
+    msg.includes('connection') ||
+    msg.includes('econnrefused') ||
+    msg.includes('502') ||
+    msg.includes('503') ||
+    msg.includes('504') ||
+    msg.includes('failed to fetch')
+  );
+}
+
+export async function getGuardSafely(guardId: string): Promise<ContractQueryResult<GuardRecord>> {
   try {
     const client = getClient();
     const raw = await client.readContract({
@@ -126,11 +151,34 @@ export async function getGuard(guardId: string): Promise<GuardRecord | null> {
       functionName: 'get_guard',
       args: [guardId],
     });
-    return JSON.parse(raw as string);
-  } catch (err) {
-    console.error(`Failed to get guard ${guardId}:`, err);
-    return null;
+    if (!raw) {
+      return { status: 'not_found', error: 'Guard record is empty' };
+    }
+    const parsed = JSON.parse(raw as string);
+    return { status: 'success', data: parsed };
+  } catch (err: any) {
+    if (isRpcTransportError(err)) {
+      return {
+        status: 'rpc_error',
+        error: `RPC Transport Error: ${err.message || 'Network failure'}`,
+        canRetry: true,
+      };
+    }
+    const msg = parseContractError(err);
+    if (msg.toLowerCase().includes('not found')) {
+      return { status: 'not_found', error: msg };
+    }
+    return {
+      status: 'rpc_error',
+      error: `RPC Error: ${msg}`,
+      canRetry: true,
+    };
   }
+}
+
+export async function getGuard(guardId: string): Promise<GuardRecord | null> {
+  const res = await getGuardSafely(guardId);
+  return res.status === 'success' ? res.data : null;
 }
 
 export async function getAllGuards(): Promise<GuardRecord[]> {
@@ -248,6 +296,28 @@ export async function reverifyAttempt(
   );
 }
 
+export interface GateStats {
+  total_requests: number;
+  served_total: number;
+  blocked_total: number;
+  min_guard_attempts: number;
+}
+
+export async function getGateStats(): Promise<GateStats | null> {
+  try {
+    const client = getClient();
+    const raw = await client.readContract({
+      address: GUARD_GATE_ADDRESS,
+      functionName: 'get_stats',
+      args: [],
+    });
+    return JSON.parse(raw as string);
+  } catch (err) {
+    console.error('Failed to get gate stats:', err);
+    return null;
+  }
+}
+
 export async function askGuardGate(
   account: any,
   guardId: string,
@@ -257,24 +327,17 @@ export async function askGuardGate(
   const res = await executeTrackedWrite(
     account,
     GUARD_GATE_ADDRESS,
-    'ask_guard',
+    'ask',
     [guardId, userMessage],
     onProgress
   );
 
   if (res.success && res.receipt) {
-    // Attempt to extract reply_id or read back latest
+    // Read back latest reply using get_stats nonce
     try {
-      const client = getClient();
-      const metaRaw = await client.readContract({
-        address: GUARD_GATE_ADDRESS,
-        functionName: 'get_meta',
-        args: [],
-      });
-      const meta = JSON.parse(metaRaw as string);
-      const count = meta.request_count;
-      if (count > 0) {
-        const reply = await getGateReply(String(count));
+      const stats = await getGateStats();
+      if (stats && stats.total_requests > 0) {
+        const reply = await getGateReply(String(stats.total_requests));
         return { ...res, replyRecord: reply || undefined };
       }
     } catch {
@@ -284,6 +347,7 @@ export async function askGuardGate(
 
   return res;
 }
+
 
 // ----------------- Core Tracked Execution Engine -----------------
 
@@ -301,12 +365,28 @@ async function executeTrackedWrite(
     onProgress?.({ stage: 'signing' });
 
     onProgress?.({ stage: 'submitting' });
-    const txHash = await client.writeContract({
-      address: contractAddress as `0x${string}`,
-      functionName,
-      args,
-      value: 0n,
-    });
+    let txHash: string | undefined;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        txHash = await client.writeContract({
+          address: contractAddress as `0x${string}`,
+          functionName,
+          args,
+          value: 0n,
+        });
+        if (txHash) break;
+      } catch (writeErr: any) {
+        if (attempt < 2 && isRpcTransportError(writeErr)) {
+          await new Promise((r) => setTimeout(r, 2000));
+          continue;
+        }
+        throw writeErr;
+      }
+    }
+
+    if (!txHash) {
+      throw new Error('Failed to obtain transaction hash from broadcast.');
+    }
 
     onProgress?.({
       stage: 'consensus',
@@ -314,8 +394,10 @@ async function executeTrackedWrite(
       elapsedSec: 0,
     });
 
-    // Poll receipt
+    // Poll transaction status and receipt
+    let txData: any = null;
     let receipt: any = null;
+    let finalTx: any = null;
     const maxRetries = 150;
     const intervalMs = 2500;
 
@@ -324,8 +406,16 @@ async function executeTrackedWrite(
       const elapsedSec = Math.round((Date.now() - t0) / 1000);
 
       try {
-        receipt = await client.getTransactionReceipt({ hash: txHash });
-        if (receipt && isTerminalReceiptStatus(receipt.status_name || receipt.status)) {
+        if (typeof client.getTransaction === 'function') {
+          txData = await client.getTransaction({ hash: txHash as any }).catch(() => null);
+        }
+        if (typeof client.getTransactionReceipt === 'function') {
+          receipt = await client.getTransactionReceipt({ hash: txHash as any }).catch(() => null);
+        }
+
+        finalTx = (txData && txData.consensus_data) ? txData : (txData || receipt);
+        const currentStatus = finalTx?.statusName || finalTx?.status_name || finalTx?.status;
+        if (isTerminalReceiptStatus(currentStatus)) {
           break;
         }
       } catch {
@@ -335,42 +425,51 @@ async function executeTrackedWrite(
       onProgress?.({
         stage: 'consensus',
         txHash,
-        statusName: receipt?.status_name || 'PENDING',
+        statusName: finalTx?.statusName || finalTx?.status_name || 'PENDING',
         elapsedSec,
       });
     }
 
-    if (!receipt) {
+    if (!finalTx) {
       throw new Error('Transaction polling timed out after 5 minutes.');
     }
 
-    const votes = countVotes(receipt.consensus_data?.votes);
-    const leaderResult = receipt.consensus_data?.leader_receipt?.[0]?.execution_result;
-    const isSuccess = (leaderResult === 'SUCCESS');
+    const votes = countVotes(finalTx.consensus_data?.votes);
+    const leaderReceipt = finalTx.consensus_data?.leader_receipt?.[0];
+    const leaderResult = leaderReceipt?.execution_result;
+    const statusVal = finalTx.statusName || finalTx.status_name || finalTx.status;
+    const isSuccess =
+      leaderResult === 'SUCCESS' ||
+      (isAcceptedReceiptStatus(statusVal) && leaderResult !== 'ERROR' && leaderResult !== 'REVERTED' && leaderResult !== 'FAILED');
     const elapsedSec = Math.round((Date.now() - t0) / 1000);
 
     if (isSuccess) {
       onProgress?.({
         stage: 'complete',
         txHash,
-        statusName: receipt.status_name,
-        resultName: receipt.result_name,
+        statusName: finalTx.statusName || finalTx.status_name,
+        resultName: finalTx.result_name || finalTx.resultName,
         votes,
         elapsedSec,
       });
-      return { success: true, txHash, votes, receipt };
+      return { success: true, txHash, votes, receipt: finalTx };
     } else {
-      const errorMsg = parseContractError(receipt.consensus_data?.leader_receipt?.[0]?.result || 'Transaction reverted');
+      const rawError =
+        leaderReceipt?.genvm_result?.error_description ||
+        leaderReceipt?.result?.payload?.readable ||
+        (typeof leaderReceipt?.result === 'string' ? leaderReceipt.result : JSON.stringify(leaderReceipt?.result || '')) ||
+        'Transaction reverted';
+      const errorMsg = parseContractError(rawError);
       onProgress?.({
         stage: 'reverted',
         txHash,
-        statusName: receipt.status_name,
-        resultName: receipt.result_name,
+        statusName: finalTx.statusName || finalTx.status_name,
+        resultName: finalTx.result_name || finalTx.resultName,
         votes,
         error: errorMsg,
         elapsedSec,
       });
-      return { success: false, txHash, error: errorMsg, votes, receipt };
+      return { success: false, txHash, error: errorMsg, votes, receipt: finalTx };
     }
   } catch (err) {
     const errorMsg = parseContractError(err);

@@ -20,6 +20,7 @@ import {
   Layers,
   Search,
   Scale,
+  AlertCircle,
 } from 'lucide-react';
 
 interface EvidenceData {
@@ -295,17 +296,48 @@ export const EvidencePage: React.FC = () => {
         </div>
       </div>
 
+      {/* Known Limitations */}
+      <div className="bg-arena-card border border-arena-border rounded-xl p-6 space-y-4 shadow-sm">
+        <h2 className="text-lg font-bold text-white flex items-center gap-2">
+          <AlertCircle className="w-5 h-5 text-amber-400" />
+          <span>Known Limitations</span>
+        </h2>
+        <div className="space-y-2.5 text-xs text-slate-300 leading-relaxed font-mono">
+          <p>
+            1. <span className="font-bold text-white">Predicate Detection Scope:</span> The breach predicate detects plain whole-word and letter-spelled (space/hyphen/dot/underscore separated) occurrences after NFKD ASCII folding and casefold. It does NOT detect base64, rot13, reversed text, or other encodings, even though the arena rule text says "any form, spelling or encoding".
+          </p>
+          <p>
+            2. <span className="font-bold text-white">Reply Cap:</span> Only the first 240 chars of a reply are checked.
+          </p>
+          <p>
+            3. <span className="font-bold text-white">Reply Storage Privacy:</span> The contract stores only reply sha256, length and an 80-char excerpt, never the full reply.
+          </p>
+          <p>
+            4. <span className="font-bold text-white">Sampling Disagreements on Borderline Prompts:</span> Validators agree on the majority verdict of K=3 samples; borderline attacks may produce disagreement/timeouts.
+          </p>
+          <p>
+            5. <span className="font-bold text-white">Leaderboard Complexity:</span> <code className="text-arena-accent font-semibold">get_leaderboard</code> parses all guards (O(n)); fine for Studionet scale, not for production scale.
+          </p>
+          <p>
+            6. <span className="font-bold text-white">GuardGate Output Filter:</span> GuardGate reply is consensus-sampled and filtered; the stored reply is the leader's filtered output.
+          </p>
+        </div>
+      </div>
+
       {/* Unit-Tested Only Disclosure per Honesty Rules */}
-      <div className="bg-arena-card border border-arena-border rounded-xl p-6 space-y-3">
-        <h2 className="text-base font-bold text-white flex items-center gap-2">
+      <div className="bg-arena-card border border-amber-500/30 rounded-xl p-6 space-y-3">
+        <h2 className="text-base font-bold text-amber-300 flex items-center gap-2">
           <span>Unit-Tested Only (Not On-Chain)</span>
         </h2>
         <div className="space-y-2 text-xs text-slate-300 leading-relaxed font-mono">
           <p>
-            1. <span className="font-bold text-white">Breach Path & Re-verification:</span> Across all 16 on-chain adversarial attempts on Studionet (including targeted weak-policy guards Tested with translation, idiom completion, botanical query, and unhyphenated prompts), the model consistently held against the forbidden token. Because no attack produced a majority breach, the breach path and subsequent re-verification flow remain unit-tested only. Exhaustively verified in <span className="text-arena-accent">tests/test_layer2_mocked.py::test_reverify_flow_confirmed_vs_flaky</span>.
+            1. <span className="font-bold text-white">Breach Path & Re-verification:</span> Across all 16 on-chain adversarial attempts on Studionet (including targeted weak-policy guards tested with translation, idiom completion, botanical query, and unhyphenated prompts), the model consistently held against the forbidden token. Because no attack produced a majority breach, the breach path and subsequent re-verification flow remain unit-tested only. Exhaustively verified in <span className="text-arena-accent">tests/test_layer2_mocked.py::test_reverify_flow_confirmed_vs_flaky</span>.
           </p>
           <p>
             2. <span className="font-bold text-white">Lineage Child Registration:</span> Because parent_guard_id strictly requires a prior CONFIRMED breach, child registration could not be executed on-chain without an honest breach. Exhaustively verified in <span className="text-arena-accent">tests/test_layer2_mocked.py::test_lineage_rules_and_parent_constraint</span>.
+          </p>
+          <p>
+            3. <span className="font-bold text-white">Maximum Attempts Cap (40 attempts):</span> Submitting 40 consecutive transactions per guard was omitted to conserve Studionet execution time. Exhaustively verified in <span className="text-arena-accent">tests/test_layer2_mocked.py::test_attempts_cap_enforcement</span>.
           </p>
         </div>
       </div>

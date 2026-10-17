@@ -198,6 +198,9 @@ export const AttackPage: React.FC = () => {
             </>
           )}
         </button>
+        <p className="text-[11px] text-center text-arena-muted">
+          Studionet-only throwaway key. Preview network, no real value.
+        </p>
       </form>
     </div>
   );

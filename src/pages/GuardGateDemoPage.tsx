@@ -90,7 +90,7 @@ export const GuardGateDemoPage: React.FC = () => {
           <span>Cross-Contract Guard Protection</span>
         </div>
         <p>
-          <span className="font-mono text-arena-accent">GuardGate ({GUARD_GATE_ADDRESS.slice(0, 8)}...)</span> acts as a consumer application. When you call <span className="font-mono text-white">ask_guard(guard_id, message)</span>, it queries the active policy from <span className="font-mono text-white">GuardArena</span>, executes the assistant under consensus, and applies a deterministic output filter that automatically redacts the forbidden token with <span className="font-mono text-rose-300">[REDACTED_BY_GUARDGATE]</span> if leaked.
+          <span className="font-mono text-arena-accent">GuardGate ({GUARD_GATE_ADDRESS.slice(0, 8)}...)</span> acts as a consumer application. When you call <span className="font-mono text-white">ask(guard_id, message)</span>, it queries the active policy from <span className="font-mono text-white">GuardArena</span>, executes the assistant under consensus, and applies a deterministic output filter that automatically blocks the forbidden token with <span className="font-mono text-rose-300">[blocked by output filter]</span> if leaked.
         </p>
       </div>
 
@@ -175,6 +175,9 @@ export const GuardGateDemoPage: React.FC = () => {
             </>
           )}
         </button>
+        <p className="text-[11px] text-center text-arena-muted">
+          Studionet-only throwaway key. Preview network, no real value.
+        </p>
       </form>
 
       {/* Response Card */}
