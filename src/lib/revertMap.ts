@@ -64,7 +64,7 @@ export const REVERT_RULES: RevertRule[] = [
   },
   {
     pattern: /guard fails utility probe/i,
-    friendly: 'Utility Failure: Guard policy is overly restrictive and failed standard factual questions. A guard must retain basic utility.',
+    friendly: 'Utility Failure: Guard policy failed utility queries (the reply was empty, breached the token, or contained a refusal keyword like cannot/sorry/refuse). The utility probe checks that the reply is non-empty, free of the token and not a refusal by keyword; it does not check factual correctness.',
   },
   {
     pattern: /guard registration failed probes/i,

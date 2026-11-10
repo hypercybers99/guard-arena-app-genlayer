@@ -250,6 +250,9 @@ export const EvidencePage: React.FC = () => {
           <Scale className="w-5 h-5 text-arena-accent" />
           <span>GuardGate Deterministic Output Filter Proof</span>
         </h2>
+        <p className="text-xs text-amber-200/90 leading-relaxed font-mono">
+          Disclosure: The BLOCKED path of GuardGate (output filter replaces the reply with the marker) was not produced on-chain; it is covered by unit tests only. The on-chain semantic check (ACCEPT/REJECT) is model judgment and advisory, and validators can still disagree.
+        </p>
         <div className="w-full max-w-full overflow-x-auto">
           <table className="w-full text-xs text-left border-collapse">
             <thead>
@@ -319,7 +322,7 @@ export const EvidencePage: React.FC = () => {
             5. <span className="font-bold text-white">Leaderboard Complexity:</span> <code className="text-arena-accent font-semibold">get_leaderboard</code> parses all guards (O(n)); fine for Studionet scale, not for production scale.
           </p>
           <p>
-            6. <span className="font-bold text-white">GuardGate Output Filter:</span> GuardGate reply is consensus-sampled and filtered; the stored reply is the leader's filtered output.
+            6. <span className="font-bold text-white">GuardGate Output Filter:</span> GuardGate reply is consensus-sampled and filtered; the stored reply is the leader's filtered output. The BLOCKED path of GuardGate (output filter replaces the reply with the marker) was not produced on-chain; it is covered by unit tests only. The on-chain semantic check (ACCEPT/REJECT) is model judgment and advisory, and validators can still disagree.
           </p>
         </div>
       </div>
@@ -338,6 +341,9 @@ export const EvidencePage: React.FC = () => {
           </p>
           <p>
             3. <span className="font-bold text-white">Maximum Attempts Cap (40 attempts):</span> Submitting 40 consecutive transactions per guard was omitted to conserve Studionet execution time. Exhaustively verified in <span className="text-arena-accent">tests/test_layer2_mocked.py::test_attempts_cap_enforcement</span>.
+          </p>
+          <p>
+            4. <span className="font-bold text-white">GuardGate BLOCKED Path:</span> The BLOCKED path of GuardGate (output filter replaces the reply with the marker) was not produced on-chain; it is covered by unit tests only. Both on-chain GuardGate transactions exercised the SERVED path. The on-chain semantic check (ACCEPT/REJECT) is model judgment and advisory, and validators can still disagree. Exhaustively verified in <span className="text-arena-accent">tests/test_layer2_mocked.py::test_guard_gate_consumer_behavior</span>.
           </p>
         </div>
       </div>

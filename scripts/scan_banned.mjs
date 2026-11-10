@@ -2,42 +2,58 @@ import fs from 'fs';
 import path from 'path';
 
 const BANNED_PATTERNS = [
-  { pattern: /\bcryptographic\s+proof\b/i, name: 'cryptographic proof' },
+  { pattern: /\bguarantee(s|d|ing)?\b/i, name: 'guarantee(s)' },
+  { pattern: /\bimmutable\b/i, name: 'immutable' },
+  { pattern: /\btrustless\b/i, name: 'trustless' },
+  { pattern: /\bofficial\b/i, name: 'official' },
+  { pattern: /\bverifiable\b/i, name: 'verifiable' },
+  { pattern: /\bprevents\b/i, name: 'prevents' },
+  { pattern: /\bWCAG\b/i, name: 'WCAG' },
+  { pattern: /\bunanimous(ly)?\b/i, name: 'unanimous' },
   { pattern: /\btamper-?proof\b/i, name: 'tamper-proof' },
   { pattern: /\bbytecode\b/i, name: 'bytecode' },
+  { pattern: /\bcryptographic\s+proof\b/i, name: 'cryptographic proof' },
+  { pattern: /\bnotary\b/i, name: 'notary' },
   { pattern: /\btestnet\b/i, name: 'testnet' },
-  { pattern: /\blive\s+network\b/i, name: 'live network' },
-  { pattern: /\bmainnet\b/i, name: 'mainnet' },
-  { pattern: /\bunanimous(ly)?\b/i, name: 'unanimous' },
   { pattern: /\brevolutionary\b/i, name: 'revolutionary' },
+  { pattern: /\bmainnet\b/i, name: 'mainnet' },
+  { pattern: /\blive\s+(network|contract|mainnet|testnet|system|mode|environment|chain|state)\b/i, name: 'live network' },
   {
     pattern: /\bfinalized\b/i,
-    name: 'finalized',
+    name: 'finalized outside status_name',
     allowPredicate: (line) =>
       line.includes('latest-final') ||
       line.includes('FINALIZED') ||
       line.includes('isTerminalReceiptStatus') ||
-      line.includes('receipt.status'),
+      line.includes('receipt.status') ||
+      line.includes('Raw receipt status') ||
+      line.includes('status_name'),
   },
   {
     pattern: /\blive\b/i,
-    name: 'live',
+    name: 'live outside allowed',
     allowPredicate: (line) =>
       line.includes('live_evidence') ||
       line.includes('run_live') ||
       line.includes('aria-live') ||
       line.includes('LiveEvidence') ||
-      line.includes('live-'),
+      line.includes('evidence_live') ||
+      line.includes('live-') ||
+      line.includes('livereload') ||
+      line.includes('keep-alive') ||
+      line.includes('execution evidence'),
   },
 ];
 
 const rootDir = process.cwd();
-const dirsToScan = ['src', 'docs'];
+const dirsToScan = ['src', 'docs', 'scripts'];
 const filesToScan = ['index.html', 'README.md'];
+const SKIPPED_FILES = new Set(['scan_banned.mjs', 'scan_banned_words.py']);
 
 let violations = [];
 
 function scanFile(filePath) {
+  if (SKIPPED_FILES.has(path.basename(filePath))) return;
   const content = fs.readFileSync(filePath, 'utf8');
   const lines = content.split('\n');
 
@@ -68,7 +84,7 @@ function scanDir(dir) {
         scanDir(fullPath);
       }
     } else if (entry.isFile()) {
-      if (['.ts', '.tsx', '.md', '.html'].includes(path.extname(entry.name))) {
+      if (['.ts', '.tsx', '.md', '.html', '.mjs', '.js', '.json'].includes(path.extname(entry.name))) {
         scanFile(fullPath);
       }
     }

@@ -132,7 +132,7 @@ export const LandingPage: React.FC = () => {
               </div>
               <h3 className="text-lg font-bold text-white">Deploy & Probe</h3>
               <p className="text-sm text-slate-300 leading-relaxed">
-                Defenders register a custom policy and pick a secret token from the fixed 64-word dictionary. The contract automatically runs naive and utility probes to guarantee the guard is functional before accepting it.
+                Defenders register a custom policy and pick a secret token from the fixed 64-word dictionary. The contract automatically runs naive and utility probes to check that the guard is functional before accepting it.
               </p>
             </div>
             <div className="pt-4 mt-4 border-t border-arena-border/40 text-xs font-mono text-arena-muted flex items-center gap-1.5">
