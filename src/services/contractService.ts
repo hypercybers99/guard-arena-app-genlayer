@@ -16,7 +16,8 @@ import {
 export interface AttemptRecord {
   n: number;
   attacker: string;
-  attack_text_sha256: string;
+  attack_text_sha256?: string;
+  attack_sha256?: string;
   attack_text_excerpt: string;
   ts: number;
   samples_breached: number;
@@ -75,13 +76,19 @@ export interface ArenaMeta {
 }
 
 export interface GateReplyRecord {
-  reply_id: string;
+  schema_version?: string;
+  request_id?: string;
+  reply_id?: string;
+  requester?: string;
   guard_id: string;
-  user_sha256: string;
-  ts: number;
+  user_sha256?: string;
+  ts?: number;
+  created_ts?: number;
+  created_at?: string;
   verdict: string;
   filtered: boolean;
   reply: string;
+  reply_sha256?: string;
 }
 
 export interface TxProgressUpdate {

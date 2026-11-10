@@ -5,6 +5,7 @@ import {
   getLineage,
   reverifyAttempt,
   type GuardRecord,
+  type AttemptRecord,
   type TxProgressUpdate,
 } from '../services/contractService';
 import { useWallet } from '../context/WalletContext';
@@ -23,6 +24,62 @@ import {
   Loader2,
   AlertCircle,
 } from 'lucide-react';
+
+const AttemptIntegrityBox: React.FC<{ attempt: AttemptRecord }> = ({ attempt }) => {
+  const [computedSha, setComputedSha] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (attempt.attack_text_excerpt) {
+      const enc = new TextEncoder();
+      const data = enc.encode(attempt.attack_text_excerpt);
+      window.crypto.subtle.digest('SHA-256', data).then((buf) => {
+        const hash = Array.from(new Uint8Array(buf))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
+        setComputedSha(hash);
+      });
+    }
+  }, [attempt.attack_text_excerpt]);
+
+  const storedAttackSha = (attempt as any).attack_sha256 || attempt.attack_text_sha256;
+  const isExactPrompt = attempt.attack_text_excerpt && attempt.attack_text_excerpt.length < 140;
+
+  return (
+    <div className="mt-2 bg-black/40 rounded-lg p-2.5 border border-arena-border/50 text-[11px] font-mono space-y-1">
+      <div className="text-arena-muted uppercase text-[9px] font-semibold tracking-wider">Consensus Derived Integrity</div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1 text-slate-300">
+        <div>
+          <span className="text-arena-muted">Samples breached: </span>
+          <span className="font-semibold">{attempt.samples_breached} / 3</span>
+        </div>
+        <div>
+          <span className="text-arena-muted">Reply length: </span>
+          <span>{attempt.reply_len ? `${attempt.reply_len} chars` : 'N/A'}</span>
+        </div>
+      </div>
+      <div className="text-arena-muted truncate">
+        <span>Stored reply SHA-256: </span>
+        <span className="text-slate-300 select-all">{attempt.reply_sha256 || 'N/A'}</span>
+      </div>
+      {storedAttackSha && (
+        <div className="text-arena-muted truncate">
+          <span>Stored attack SHA-256: </span>
+          <span className="text-slate-300 select-all">{storedAttackSha}</span>
+        </div>
+      )}
+      {isExactPrompt && storedAttackSha && computedSha && (
+        <div className="pt-0.5 text-[10px]">
+          <span>Hash matches stored attack: </span>
+          {storedAttackSha === computedSha ? (
+            <span className="text-emerald-400 font-bold">yes</span>
+          ) : (
+            <span className="text-rose-400 font-bold">no</span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export const GuardDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -354,6 +411,9 @@ export const GuardDetailPage: React.FC = () => {
                       </p>
                     </div>
                   )}
+
+                  {/* Consensus Derived Integrity */}
+                  <AttemptIntegrityBox attempt={att} />
 
                   {/* Reverify Action Button (Big Callout for BREACHED_UNCONFIRMED) */}
                   {isUnconfirmed && (

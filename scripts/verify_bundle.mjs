@@ -16,6 +16,8 @@ if (!fs.existsSync(indexHtml)) {
 
 // Check bundle size & ensure no superseded addresses in dist/
 const SUPERSEDED_ADDRESSES = [
+  '0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474'.toLowerCase(),
+  '0xE699C8828F4F054fEe73B251837CE8B373Ba3D02'.toLowerCase(),
   '0xEb692Bbe9CDdE00a22A799A8650843882e25DF79'.toLowerCase(),
   '0x6ebabD1360f65C4F08DaDfe57ae9af2f7C49dEdD'.toLowerCase(),
 ];

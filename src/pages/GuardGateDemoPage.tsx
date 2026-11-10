@@ -22,6 +22,22 @@ export const GuardGateDemoPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [txProgress, setTxProgress] = useState<TxProgressUpdate>({ stage: 'idle' });
   const [lastReply, setLastReply] = useState<GateReplyRecord | null>(null);
+  const [computedSha256, setComputedSha256] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (lastReply?.reply !== undefined) {
+      const enc = new TextEncoder();
+      const data = enc.encode(lastReply.reply);
+      window.crypto.subtle.digest('SHA-256', data).then((buf) => {
+        const hash = Array.from(new Uint8Array(buf))
+          .map((b) => b.toString(16).padStart(2, '0'))
+          .join('');
+        setComputedSha256(hash);
+      });
+    } else {
+      setComputedSha256(null);
+    }
+  }, [lastReply]);
 
   useEffect(() => {
     async function loadGuards() {
@@ -207,9 +223,49 @@ export const GuardGateDemoPage: React.FC = () => {
             </div>
           </div>
 
+          {/* Consensus Derived Integrity Fields */}
+          <div className="bg-arena-surface/80 rounded-lg p-3.5 border border-arena-border/60 text-xs font-mono space-y-2">
+            <div className="text-arena-muted uppercase text-[10px] font-semibold tracking-wider">Consensus Derived Integrity</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px]">
+              <div>
+                <span className="text-arena-muted">Filtered flag: </span>
+                <span className={lastReply.filtered ? 'text-rose-400 font-bold' : 'text-emerald-400 font-bold'}>
+                  {lastReply.filtered ? 'true' : 'false'}
+                </span>
+              </div>
+              <div>
+                <span className="text-arena-muted">Stored verdict: </span>
+                <span className="text-white font-bold">{lastReply.verdict}</span>
+              </div>
+            </div>
+
+            <div className="space-y-1 text-[11px] pt-1 border-t border-arena-border/40">
+              <div className="text-arena-muted truncate">
+                <span>Stored SHA-256: </span>
+                <span className="text-slate-300 select-all">{lastReply.reply_sha256 || 'N/A'}</span>
+              </div>
+              <div className="text-arena-muted truncate">
+                <span>Local SHA-256: </span>
+                <span className="text-slate-300 select-all">{computedSha256 || 'computing...'}</span>
+              </div>
+              <div className="pt-1">
+                <span>Hash matches stored reply: </span>
+                {lastReply.reply_sha256 && computedSha256 ? (
+                  lastReply.reply_sha256 === computedSha256 ? (
+                    <span className="text-emerald-400 font-bold">yes</span>
+                  ) : (
+                    <span className="text-rose-400 font-bold">no</span>
+                  )
+                ) : (
+                  <span className="text-arena-muted">checking...</span>
+                )}
+              </div>
+            </div>
+          </div>
+
           <div className="text-xs font-mono text-arena-muted flex items-center justify-between pt-1">
             <span>Verdict: <span className="text-white font-bold">{lastReply.verdict}</span></span>
-            <span>Reply ID: {lastReply.reply_id}</span>
+            <span>Request ID: {lastReply.request_id || lastReply.reply_id || 'N/A'}</span>
           </div>
         </div>
       )}

@@ -2,8 +2,8 @@
 
 BreakTheGuard is a decentralized adversarial arena for language model guards on **GenLayer Studionet (Preview)** (Chain ID: `61999`, RPC: `https://studio.genlayer.com/api`).
 
-- **Contract Repository**: [huzyow155/guard-arena-genlayer](https://github.com/huzyow155/guard-arena-genlayer)
-- **Application Repository**: [huzyow155/guard-arena-app-genlayer](https://github.com/huzyow155/guard-arena-app-genlayer)
+- **Contract Repository**: [hypercybers99/guard-arena-genlayer](https://github.com/hypercybers99/guard-arena-genlayer)
+- **Application Repository**: [hypercybers99/guard-arena-app-genlayer](https://github.com/hypercybers99/guard-arena-app-genlayer)
 - **Network**: GenLayer Studionet (Preview)
 - **Explorer**: [https://explorer-studio.genlayer.com](https://explorer-studio.genlayer.com)
 
@@ -15,13 +15,15 @@ The `contracts-reference/` directory contains byte-identical copies of the verif
 
 | Contract | Status | Address | Deploy Tx Hash | SHA-256 Fingerprint |
 | :--- | :--- | :--- | :--- | :--- |
-| **GuardArena** | Active (Main Arena) | `0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474` | `0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0` | `fd163692452d869e1422c63efc09b388269e68175f22bcff3b0783e9ed55f1c4` |
-| **GuardGate** | Active (Consumer Demo) | `0xE699C8828F4F054fEe73B251837CE8B373Ba3D02` | `0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21` | `4f4ef9bd903f24b145faecfef50a2d78227fa68e2693cc7eb07889cf76c92233` |
+| **GuardArena** | Active (Main Arena v1.1.0) | `0xFcEAb957e1412e063760A534C294B897071E144B` | `0x515d7e498651de97538d9e41821b3da7fbb724156f6b1b924d37ccb28410aad9` | `a93010bb5a3371b8a2fddcc1b8c12d7a459c9572abe033ef8e265ed6c9872b41` |
+| **GuardGate** | Active (Consumer Demo v1.1.0) | `0xCc9086C43D4152A5f5b5eb7fCfDfcd03a1f67AB6` | `0x0b2275177af47611e47d057c77c5c971e8e41cff1fd76ba6ac700d68586a0147` | `6ebf7eb0606c00a95ece12123035e99bcecd9015c311a76a0ab3d3da7c90c4d2` |
 
 ### Superseded Deployments
 
 | Contract | Status | Address | Reason |
 | :--- | :--- | :--- | :--- |
+| **GuardArena** | Superseded (v1.0.0) | `0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474` | Pre-v1.1.0: Derived consensus fields were leader-supplied rather than deterministically derived by validators. |
+| **GuardGate** | Superseded (v1.0.0) | `0xE699C8828F4F054fEe73B251837CE8B373Ba3D02` | Pre-v1.1.0: Reply text and filter flags were not verified and bound under validator consensus. |
 | **Probe** | Superseded (Diagnostic Only) | `0xEb692Bbe9CDdE00a22A799A8650843882e25DF79` | Pre-deployment diagnostic contract used to measure runner VM and consensus telemetry. |
 | **GuardArena** | Superseded (Earlier Build) | `0x6ebabD1360f65C4F08DaDfe57ae9af2f7C49dEdD` | Superseded initial deployment prior to GuardGate storage schema update. |
 

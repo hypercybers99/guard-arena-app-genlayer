@@ -5,11 +5,11 @@ import crypto from 'crypto';
 const PINNED = [
   {
     name: 'GuardArena.py',
-    expected: 'fd163692452d869e1422c63efc09b388269e68175f22bcff3b0783e9ed55f1c4',
+    expected: 'a93010bb5a3371b8a2fddcc1b8c12d7a459c9572abe033ef8e265ed6c9872b41',
   },
   {
     name: 'GuardGate.py',
-    expected: '4f4ef9bd903f24b145faecfef50a2d78227fa68e2693cc7eb07889cf76c92233',
+    expected: '6ebf7eb0606c00a95ece12123035e99bcecd9015c311a76a0ab3d3da7c90c4d2',
   },
 ];
 

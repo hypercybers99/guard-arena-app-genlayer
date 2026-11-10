@@ -9,6 +9,8 @@ const SECRET_PATTERNS = [
 ];
 
 const ALLOWED_HASHES = new Set([
+  '0x515d7e498651de97538d9e41821b3da7fbb724156f6b1b924d37ccb28410aad9'.toLowerCase(), // Arena v1.1.0 deploy
+  '0x0b2275177af47611e47d057c77c5c971e8e41cff1fd76ba6ac700d68586a0147'.toLowerCase(), // Gate v1.1.0 deploy
   '0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0'.toLowerCase(), // Arena deploy
   '0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21'.toLowerCase(), // Gate deploy
   '0xee2fcce3cb68115d0774f785ef1a33d808d10cb781d82fe0420c3b4793086c10'.toLowerCase(), // Superseded deploy

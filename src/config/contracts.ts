@@ -6,21 +6,21 @@ export const RPC_URL = 'https://studio.genlayer.com/api';
 export const EXPLORER_BASE = 'https://explorer-studio.genlayer.com';
 export const FAUCET_URL = 'https://studio.genlayer.com';
 
-// Active Intelligent Contracts on GenLayer Studionet (Preview)
-export const GUARD_ARENA_ADDRESS = '0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474' as const;
-export const GUARD_ARENA_DEPLOY_TX = '0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0' as const;
-export const GUARD_ARENA_SHA256 = 'fd163692452d869e1422c63efc09b388269e68175f22bcff3b0783e9ed55f1c4' as const;
+// Active Intelligent Contracts on GenLayer Studionet (Preview) (v1.1.0)
+export const GUARD_ARENA_ADDRESS = '0xFcEAb957e1412e063760A534C294B897071E144B' as const;
+export const GUARD_ARENA_DEPLOY_TX = '0x515d7e498651de97538d9e41821b3da7fbb724156f6b1b924d37ccb28410aad9' as const;
+export const GUARD_ARENA_SHA256 = 'a93010bb5a3371b8a2fddcc1b8c12d7a459c9572abe033ef8e265ed6c9872b41' as const;
 
-export const GUARD_GATE_ADDRESS = '0xE699C8828F4F054fEe73B251837CE8B373Ba3D02' as const;
-export const GUARD_GATE_DEPLOY_TX = '0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21' as const;
-export const GUARD_GATE_SHA256 = '4f4ef9bd903f24b145faecfef50a2d78227fa68e2693cc7eb07889cf76c92233' as const;
+export const GUARD_GATE_ADDRESS = '0xCc9086C43D4152A5f5b5eb7fCfDfcd03a1f67AB6' as const;
+export const GUARD_GATE_DEPLOY_TX = '0x0b2275177af47611e47d057c77c5c971e8e41cff1fd76ba6ac700d68586a0147' as const;
+export const GUARD_GATE_SHA256 = '6ebf7eb0606c00a95ece12123035e99bcecd9015c311a76a0ab3d3da7c90c4d2' as const;
 
-export const CONTRACT_REPO_URL = 'https://github.com/huzyow155/guard-arena-genlayer';
-export const APP_REPO_URL = 'https://github.com/huzyow155/guard-arena-app-genlayer';
+export const CONTRACT_REPO_URL = 'https://github.com/hypercybers99/guard-arena-genlayer';
+export const APP_REPO_URL = 'https://github.com/hypercybers99/guard-arena-app-genlayer';
 
 export const GENLAYER_CHAIN = studionet;
 
-// The immutable on-chain list of 64 harmless common nouns
+// The contract-defined on-chain list of 64 harmless common nouns
 export const TOKEN_WORDLIST = [
   'apple', 'banana', 'cherry', 'orange', 'lemon', 'mango', 'grape', 'peach',
   'melon', 'berry', 'papaya', 'apricot', 'plum', 'pear', 'purple', 'yellow',

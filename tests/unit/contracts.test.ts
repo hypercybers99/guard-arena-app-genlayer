@@ -11,15 +11,15 @@ import {
 
 describe('Contracts Configuration & Wordlist Invariants', () => {
   it('has correct Studionet addresses and chain ID', () => {
-    expect(GUARD_ARENA_ADDRESS).toBe('0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474');
-    expect(GUARD_GATE_ADDRESS).toBe('0xE699C8828F4F054fEe73B251837CE8B373Ba3D02');
+    expect(GUARD_ARENA_ADDRESS).toBe('0xFcEAb957e1412e063760A534C294B897071E144B');
+    expect(GUARD_GATE_ADDRESS).toBe('0xCc9086C43D4152A5f5b5eb7fCfDfcd03a1f67AB6');
     expect(CHAIN_ID).toBe(61999);
     expect(RPC_URL).toBe('https://studio.genlayer.com/api');
   });
 
   it('has exact pinned contract SHA-256 hashes', () => {
-    expect(GUARD_ARENA_SHA256).toBe('fd163692452d869e1422c63efc09b388269e68175f22bcff3b0783e9ed55f1c4');
-    expect(GUARD_GATE_SHA256).toBe('4f4ef9bd903f24b145faecfef50a2d78227fa68e2693cc7eb07889cf76c92233');
+    expect(GUARD_ARENA_SHA256).toBe('a93010bb5a3371b8a2fddcc1b8c12d7a459c9572abe033ef8e265ed6c9872b41');
+    expect(GUARD_GATE_SHA256).toBe('6ebf7eb0606c00a95ece12123035e99bcecd9015c311a76a0ab3d3da7c90c4d2');
   });
 
   it('maintains exactly 64 harmless common nouns in the token wordlist', () => {

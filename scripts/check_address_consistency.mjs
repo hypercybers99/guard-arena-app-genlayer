@@ -1,13 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 
-// Active contract addresses
-const ACTIVE_ARENA = '0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474'.toLowerCase();
-const ACTIVE_GATE = '0xE699C8828F4F054fEe73B251837CE8B373Ba3D02'.toLowerCase();
+// Active contract addresses (v1.1.0)
+const ACTIVE_ARENA = '0xFcEAb957e1412e063760A534C294B897071E144B'.toLowerCase();
+const ACTIVE_GATE = '0xCc9086C43D4152A5f5b5eb7fCfDfcd03a1f67AB6'.toLowerCase();
 
 // Superseded addresses: MUST NOT appear anywhere in src/, scripts/, tests/, docs/
 // They may appear ONLY in README.md under the superseded table.
 const SUPERSEDED_ADDRESSES = [
+  '0x05628E36D65281bfa7EA64DBcCd9Ac9c2e1a6474'.toLowerCase(), // Superseded v1.0.0 Arena
+  '0xE699C8828F4F054fEe73B251837CE8B373Ba3D02'.toLowerCase(), // Superseded v1.0.0 Gate
   '0xEb692Bbe9CDdE00a22A799A8650843882e25DF79'.toLowerCase(), // Probe diagnostic
   '0x6ebabD1360f65C4F08DaDfe57ae9af2f7C49dEdD'.toLowerCase(), // Initial Arena deployment
 ];

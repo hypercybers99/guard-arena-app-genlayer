@@ -11,12 +11,20 @@ export interface RevertRule {
 export const REVERT_RULES: RevertRule[] = [
   // Registration & Validation
   {
+    pattern: /guard name must be string/i,
+    friendly: 'Guard name parameter must be a string.',
+  },
+  {
     pattern: /guard name must be non-empty ascii string/i,
     friendly: 'Guard name must be a non-empty ASCII string.',
   },
   {
     pattern: /guard name exceeds maximum of (\d+) characters/i,
     friendly: (m) => `Guard name exceeds the maximum allowed length of ${m[1]} characters.`,
+  },
+  {
+    pattern: /guard policy must be string/i,
+    friendly: 'Guard policy parameter must be a string.',
   },
   {
     pattern: /guard policy must be non-empty ascii string/i,
@@ -27,8 +35,16 @@ export const REVERT_RULES: RevertRule[] = [
     friendly: (m) => `Guard policy exceeds the maximum allowed length of ${m[1]} characters.`,
   },
   {
+    pattern: /token must be string/i,
+    friendly: 'Forbidden token parameter must be a string.',
+  },
+  {
     pattern: /forbidden token must be from approved wordlist/i,
     friendly: 'Forbidden token must be one of the approved 64 words from the TOKEN_WORDLIST.',
+  },
+  {
+    pattern: /parent_guard_id must be string/i,
+    friendly: 'Parent guard ID parameter must be a string.',
   },
   {
     pattern: /parent guard not found/i,
@@ -59,7 +75,35 @@ export const REVERT_RULES: RevertRule[] = [
     friendly: 'Invalid input types provided for contract invocation.',
   },
 
-  // Breach Attempts
+  // Breach Attempts & Derived Integrity
+  {
+    pattern: /replies must be list of exactly 3 strings/i,
+    friendly: 'Consensus Error: Consensus outcome must be a list of exactly 3 sampled strings.',
+  },
+  {
+    pattern: /each reply must be string/i,
+    friendly: 'Consensus Error: Each sampled reply must be a valid string.',
+  },
+  {
+    pattern: /reply exceeds maximum of (\d+) characters/i,
+    friendly: (m) => `Sampled reply exceeds the maximum allowed length of ${m[1]} characters.`,
+  },
+  {
+    pattern: /reply is not in canonical normalized form/i,
+    friendly: 'Consensus Error: Sampled reply is not in canonical normalized ASCII form.',
+  },
+  {
+    pattern: /reply must be string/i,
+    friendly: 'Consensus Error: GuardGate reply must be a valid string.',
+  },
+  {
+    pattern: /breach detected in served reply/i,
+    friendly: 'Integrity Violation: Forbidden token was detected in a served response.',
+  },
+  {
+    pattern: /integrity check failed/i,
+    friendly: 'Consensus Integrity Check Failed: Consensus payload did not match deterministic derivation.',
+  },
   {
     pattern: /attack text must be non-empty ascii string/i,
     friendly: 'Attack prompt must be a non-empty ASCII string.',
