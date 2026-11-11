@@ -72,7 +72,7 @@ export const LandingPage: React.FC = () => {
 
         {/* Logo Shield Hero Display */}
         <div className="flex justify-center mb-4">
-          <div className="p-3 bg-arena-card/60 rounded-2xl border border-arena-primary/30 shadow-2xl backdrop-blur-sm animate-pulse-subtle">
+          <div className="p-3 bg-arena-card border border-arena-primary/30 shadow-2xl rounded-2xl animate-pulse-subtle">
             <Logo size={76} />
           </div>
         </div>
@@ -96,7 +96,7 @@ export const LandingPage: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
           <Link
             to="/arena"
-            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-arena-primary hover:bg-arena-primaryHover text-white font-semibold text-base shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-arena-primary hover:bg-arena-primaryHover text-white font-semibold text-base shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2 transition-all transform hover:-translate-y-0.5 focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
           >
             <Shield className="w-5 h-5" />
             <span>Enter The Arena</span>
@@ -104,7 +104,7 @@ export const LandingPage: React.FC = () => {
           </Link>
           <Link
             to="/register"
-            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-arena-card hover:bg-arena-cardHover border border-arena-border text-slate-200 font-semibold text-base flex items-center justify-center gap-2 transition-all"
+            className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-arena-card hover:bg-arena-cardHover border border-arena-border text-slate-200 font-semibold text-base flex items-center justify-center gap-2 transition-all focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
           >
             <Sparkles className="w-5 h-5 text-arena-accent" />
             <span>Deploy A Guard</span>

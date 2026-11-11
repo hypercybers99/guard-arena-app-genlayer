@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { getAllGuards, type GuardRecord } from '../services/contractService';
 import { GuardCard } from '../components/GuardCard';
+import { CardSkeleton } from '../components/Skeleton';
+import { EmptyState } from '../components/EmptyState';
 import { Link } from 'react-router-dom';
-import { Shield, Search, Filter, PlusCircle, Loader2, RefreshCw } from 'lucide-react';
+import { Shield, Search, Filter, PlusCircle, RefreshCw } from 'lucide-react';
 
 export const ArenaPage: React.FC = () => {
   const [guards, setGuards] = useState<GuardRecord[]>([]);
@@ -69,16 +71,18 @@ export const ArenaPage: React.FC = () => {
 
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <button
+            type="button"
             onClick={loadData}
             disabled={loading}
-            className="p-2 rounded-lg bg-arena-card border border-arena-border hover:bg-arena-border text-arena-muted hover:text-white transition-colors"
+            className="p-2 rounded-lg bg-arena-card border border-arena-border hover:bg-arena-border text-arena-muted hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
             title="Refresh Guard List"
+            aria-label="Refresh Guard List"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           </button>
           <Link
             to="/register"
-            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-arena-primary hover:bg-arena-primaryHover text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+            className="flex-1 sm:flex-initial flex items-center justify-center gap-2 bg-arena-primary hover:bg-arena-primaryHover text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
           >
             <PlusCircle className="w-4 h-4" />
             <span>Deploy Guard</span>
@@ -90,24 +94,28 @@ export const ArenaPage: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {/* Search */}
         <div className="relative">
-          <Search className="w-4 h-4 text-arena-muted absolute left-3 top-3" />
+          <Search className="w-4 h-4 text-arena-muted absolute left-3 top-3" aria-hidden="true" />
           <input
             type="text"
+            id="arena-search-input"
+            aria-label="Search guards by name, ID, or policy"
             placeholder="Search by name, ID, or policy..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full bg-arena-card border border-arena-border rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-arena-muted focus:outline-none focus:border-arena-primary"
+            className="w-full bg-arena-card border border-arena-border rounded-lg pl-9 pr-3 py-2 text-sm text-white placeholder-arena-muted focus:outline-none focus:border-arena-primary focus-visible:ring-2 focus-visible:ring-arena-accent"
           />
         </div>
 
         {/* Status Filter */}
         <div className="flex items-center gap-2 bg-arena-card border border-arena-border rounded-lg px-3 py-1.5 text-xs">
-          <Filter className="w-3.5 h-3.5 text-arena-muted" />
-          <span className="text-arena-muted">Status:</span>
+          <Filter className="w-3.5 h-3.5 text-arena-muted" aria-hidden="true" />
+          <label htmlFor="arena-status-filter" className="text-arena-muted">Status:</label>
           <select
+            id="arena-status-filter"
+            aria-label="Filter guards by status"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as any)}
-            className="bg-transparent text-white font-medium focus:outline-none cursor-pointer"
+            className="bg-transparent text-white font-medium focus:outline-none cursor-pointer flex-1"
           >
             <option value="ALL" className="bg-arena-card">All Statuses</option>
             <option value="ACTIVE" className="bg-arena-card">Active Only</option>
@@ -117,11 +125,13 @@ export const ArenaPage: React.FC = () => {
 
         {/* Sort */}
         <div className="flex items-center gap-2 bg-arena-card border border-arena-border rounded-lg px-3 py-1.5 text-xs">
-          <span className="text-arena-muted">Sort:</span>
+          <label htmlFor="arena-sort-filter" className="text-arena-muted">Sort:</label>
           <select
+            id="arena-sort-filter"
+            aria-label="Sort guards by criteria"
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as any)}
-            className="bg-transparent text-white font-medium focus:outline-none cursor-pointer"
+            className="bg-transparent text-white font-medium focus:outline-none cursor-pointer flex-1"
           >
             <option value="robustness" className="bg-arena-card">Highest Robustness</option>
             <option value="attempts" className="bg-arena-card">Most Attempts</option>
@@ -132,18 +142,26 @@ export const ArenaPage: React.FC = () => {
 
       {/* Content Grid */}
       {loading ? (
-        <div className="text-center py-20 space-y-3">
-          <Loader2 className="w-8 h-8 text-arena-accent animate-spin mx-auto" />
-          <p className="text-sm text-arena-muted font-mono">Loading guards from GuardArena contract...</p>
-        </div>
+        <CardSkeleton count={6} />
       ) : filteredGuards.length === 0 ? (
-        <div className="text-center py-16 bg-arena-card/40 border border-arena-border rounded-xl space-y-3">
-          <Shield className="w-12 h-12 text-arena-muted mx-auto opacity-40" />
-          <h3 className="text-lg font-bold text-white">No Guards Match Filter</h3>
-          <p className="text-sm text-arena-muted max-w-sm mx-auto">
-            Try adjusting your search query or status filter, or register a new guard.
-          </p>
-        </div>
+        <EmptyState
+          icon={Shield}
+          title="No Guards Found"
+          description={
+            search
+              ? `No guards matched query "${search}". Try clearing search or adjusting your status filter.`
+              : 'No guards match the selected filter criteria on GenLayer Studionet (Preview).'
+          }
+          action={
+            <Link
+              to="/register"
+              className="inline-flex items-center gap-2 bg-arena-primary hover:bg-arena-primaryHover text-white px-4 py-2 rounded-lg text-xs font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
+            >
+              <PlusCircle className="w-4 h-4" />
+              <span>Deploy New Guard</span>
+            </Link>
+          }
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredGuards.map((g) => (

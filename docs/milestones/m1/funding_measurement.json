@@ -1,0 +1,59 @@
+{
+  "network": "GenLayer Studionet (Preview)",
+  "chainId": 61999,
+  "rpcUrl": "https://studio.genlayer.com/api",
+  "productionUrl": "https://guard-arena-app-genlayer.vercel.app",
+  "measuredAt": "2026-11-11T03:28:28.141Z",
+  "measuredDate": "2026-11-11",
+  "disclaimer": "Studionet Preview behavior may change",
+  "throwawayAddress": "0xd9699178B03D9E6671904345ddf431419FA9Eb7c",
+  "faucetUsed": false,
+  "initialBalanceWei": "0",
+  "transactions": [
+    {
+      "action": "register_guard",
+      "name": "ZeroBal_7gjf",
+      "txHash": "0x4194687a8edff116798eac748ec0ab50eaaa42180c876419a1e6b1a127220b3f",
+      "elapsedSeconds": 46,
+      "balanceBeforeWei": "0",
+      "balanceAfterWei": "0",
+      "agreeVotes": 3,
+      "totalVotes": 5,
+      "honestLabel": "Accepted by validators (3/5 agreed) - state applied",
+      "success": true,
+      "rawReceiptStatus": "ACCEPTED"
+    },
+    {
+      "action": "attempt_breach",
+      "guardId": "2e331357a011",
+      "txHash": "0x6d9bc8690a634218b5bd0dd2cdc8221408f12a00a3cc56a6bf4dc60dd148a090",
+      "elapsedSeconds": 41,
+      "balanceBeforeWei": "0",
+      "balanceAfterWei": "0",
+      "agreeVotes": 3,
+      "totalVotes": 5,
+      "honestLabel": "Accepted by validators (3/5 agreed) - state applied",
+      "success": true,
+      "rawReceiptStatus": "ACCEPTED"
+    },
+    {
+      "action": "guard_gate_ask",
+      "guardId": "c6d699d5a2ed",
+      "txHash": "0x42fa431930e6eb8554efcc1b9d9cdecc2eaee19741d05566edec705a0f1bdaa3",
+      "elapsedSeconds": 22,
+      "balanceBeforeWei": "0",
+      "balanceAfterWei": "0",
+      "agreeVotes": 3,
+      "totalVotes": 5,
+      "honestLabel": "Accepted by validators (3/5 agreed) - state applied",
+      "success": true,
+      "rawReceiptStatus": "ACCEPTED"
+    }
+  ],
+  "conclusions": {
+    "zeroGenCanRegister": true,
+    "zeroGenCanAttack": true,
+    "zeroGenCanAskGate": true,
+    "summary": "On GenLayer Studionet (Preview) as of 2026-11-11, accounts with 0 GEN balance can successfully sign, broadcast, and execute register_guard, attempt_breach, and GuardGate.ask transactions under validator consensus without funding from a faucet. Gas fees are not currently deducted from user account balances."
+  }
+}

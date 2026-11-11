@@ -1,0 +1,553 @@
+{
+  "targetUrl": "https://guard-arena-app-genlayer.vercel.app",
+  "timestamp": "2026-11-11T03:31:31.575Z",
+  "theme": "dark",
+  "routesScanned": [
+    "/",
+    "/arena",
+    "/guard/c6d699d5a2ed",
+    "/attack",
+    "/register",
+    "/leaderboard",
+    "/gate",
+    "/evidence",
+    "/wallet"
+  ],
+  "viewportsScanned": [
+    1440,
+    500,
+    390
+  ],
+  "nativeDialogCount": 0,
+  "deepLinkCheck": {
+    "/guard/c6d699d5a2ed": {
+      "httpStatus": 200,
+      "loaded": true,
+      "h1": "PlainGuard",
+      "contentSample": "BreakTheGuard\nADVERSARIAL ROBUSTNESS ARENA\nArena\nRegister Guard\nAttack\nLeaderboard\nGuardGate Demo\nEvidence\n0x705a...2A19\nBack to Arena\nPlainGuard\nACTI"
+    },
+    "/attack/c6d699d5a2ed": {
+      "httpStatus": 200,
+      "loaded": true,
+      "h1": "Launch Adversarial Attack",
+      "contentSample": "BreakTheGuard\nADVERSARIAL ROBUSTNESS ARENA\nArena\nRegister Guard\nAttack\nLeaderboard\nGuardGate Demo\nEvidence\n0x51ea...14E4\nLaunch Adversarial Attack\n\nCh"
+    }
+  },
+  "axeScan": {
+    "/": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/arena": {
+      "390": {
+        "violationsCount": 2,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+            "nodesCount": 5,
+            "selectors": [
+              ".rounded-xl.p-5.shadow-md:nth-child(1) > div:nth-child(1) > .space-y-1.mb-4 > .text-arena-muted\\/80.leading-normal.px-1",
+              ".rounded-xl.p-5.shadow-md:nth-child(2) > div:nth-child(1) > .space-y-1.mb-4 > .text-arena-muted\\/80.leading-normal.px-1",
+              ".rounded-xl.p-5.shadow-md:nth-child(3) > div:nth-child(1) > .space-y-1.mb-4 > .text-arena-muted\\/80.leading-normal.px-1"
+            ]
+          },
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 2,
+            "selectors": [
+              ".py-1\\.5.bg-arena-card.border-arena-border:nth-child(2) > select",
+              ".py-1\\.5.bg-arena-card.border-arena-border:nth-child(3) > select"
+            ]
+          }
+        ]
+      },
+      "500": {
+        "violationsCount": 2,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+            "nodesCount": 5,
+            "selectors": [
+              ".rounded-xl.p-5.shadow-md:nth-child(1) > div:nth-child(1) > .space-y-1.mb-4 > .text-arena-muted\\/80.leading-normal.px-1",
+              ".rounded-xl.p-5.shadow-md:nth-child(2) > div:nth-child(1) > .space-y-1.mb-4 > .text-arena-muted\\/80.leading-normal.px-1",
+              ".rounded-xl.p-5.shadow-md:nth-child(3) > div:nth-child(1) > .space-y-1.mb-4 > .text-arena-muted\\/80.leading-normal.px-1"
+            ]
+          },
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 2,
+            "selectors": [
+              ".py-1\\.5.bg-arena-card.border-arena-border:nth-child(2) > select",
+              ".py-1\\.5.bg-arena-card.border-arena-border:nth-child(3) > select"
+            ]
+          }
+        ]
+      },
+      "1440": {
+        "violationsCount": 2,
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "description": "Ensure the contrast between foreground and background colors meets WCAG 2 AA minimum contrast ratio thresholds",
+            "nodesCount": 5,
+            "selectors": [
+              ".rounded-xl.p-5.shadow-md:nth-child(1) > div:nth-child(1) > .space-y-1.mb-4 > .text-arena-muted\\/80.leading-normal.px-1",
+              ".rounded-xl.p-5.shadow-md:nth-child(2) > div:nth-child(1) > .space-y-1.mb-4 > .text-arena-muted\\/80.leading-normal.px-1",
+              ".rounded-xl.p-5.shadow-md:nth-child(3) > div:nth-child(1) > .space-y-1.mb-4 > .text-arena-muted\\/80.leading-normal.px-1"
+            ]
+          },
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 2,
+            "selectors": [
+              ".py-1\\.5.bg-arena-card.border-arena-border:nth-child(2) > select",
+              ".py-1\\.5.bg-arena-card.border-arena-border:nth-child(3) > select"
+            ]
+          }
+        ]
+      }
+    },
+    "/guard/c6d699d5a2ed": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/attack": {
+      "390": {
+        "violationsCount": 1,
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 1,
+            "selectors": [
+              "select"
+            ]
+          }
+        ]
+      },
+      "500": {
+        "violationsCount": 1,
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 1,
+            "selectors": [
+              "select"
+            ]
+          }
+        ]
+      },
+      "1440": {
+        "violationsCount": 1,
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 1,
+            "selectors": [
+              "select"
+            ]
+          }
+        ]
+      }
+    },
+    "/register": {
+      "390": {
+        "violationsCount": 1,
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 2,
+            "selectors": [
+              ".space-y-1\\.5:nth-child(2) > select",
+              ".space-y-1\\.5:nth-child(4) > select"
+            ]
+          }
+        ]
+      },
+      "500": {
+        "violationsCount": 1,
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 1,
+            "selectors": [
+              "select"
+            ]
+          }
+        ]
+      },
+      "1440": {
+        "violationsCount": 1,
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 1,
+            "selectors": [
+              "select"
+            ]
+          }
+        ]
+      }
+    },
+    "/leaderboard": {
+      "390": {
+        "violationsCount": 2,
+        "violations": [
+          {
+            "id": "landmark-one-main",
+            "impact": "moderate",
+            "description": "Ensure the document has a main landmark",
+            "nodesCount": 1,
+            "selectors": [
+              "html"
+            ]
+          },
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+            "nodesCount": 1,
+            "selectors": [
+              "html"
+            ]
+          }
+        ]
+      },
+      "500": {
+        "violationsCount": 2,
+        "violations": [
+          {
+            "id": "landmark-one-main",
+            "impact": "moderate",
+            "description": "Ensure the document has a main landmark",
+            "nodesCount": 1,
+            "selectors": [
+              "html"
+            ]
+          },
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+            "nodesCount": 1,
+            "selectors": [
+              "html"
+            ]
+          }
+        ]
+      },
+      "1440": {
+        "violationsCount": 2,
+        "violations": [
+          {
+            "id": "landmark-one-main",
+            "impact": "moderate",
+            "description": "Ensure the document has a main landmark",
+            "nodesCount": 1,
+            "selectors": [
+              "html"
+            ]
+          },
+          {
+            "id": "page-has-heading-one",
+            "impact": "moderate",
+            "description": "Ensure that the page, or at least one of its frames contains a level-one heading",
+            "nodesCount": 1,
+            "selectors": [
+              "html"
+            ]
+          }
+        ]
+      }
+    },
+    "/gate": {
+      "390": {
+        "violationsCount": 1,
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 1,
+            "selectors": [
+              "select"
+            ]
+          }
+        ]
+      },
+      "500": {
+        "violationsCount": 1,
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 1,
+            "selectors": [
+              "select"
+            ]
+          }
+        ]
+      },
+      "1440": {
+        "violationsCount": 1,
+        "violations": [
+          {
+            "id": "select-name",
+            "impact": "critical",
+            "description": "Ensure select element has an accessible name",
+            "nodesCount": 1,
+            "selectors": [
+              "select"
+            ]
+          }
+        ]
+      }
+    },
+    "/evidence": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/wallet": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    }
+  },
+  "keyboardCheck": {
+    "/": {
+      "interactiveControls": 17,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/arena": {
+      "interactiveControls": 34,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/guard/c6d699d5a2ed": {
+      "interactiveControls": 16,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/attack": {
+      "interactiveControls": 17,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/register": {
+      "interactiveControls": 19,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/leaderboard": {
+      "interactiveControls": 0,
+      "keyboardAccessible": false,
+      "tabNavigationVerified": true
+    },
+    "/gate": {
+      "interactiveControls": 17,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/evidence": {
+      "interactiveControls": 25,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/wallet": {
+      "interactiveControls": 22,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    }
+  },
+  "lighthouse": {
+    "/": {
+      "desktop": {
+        "performance": 98,
+        "accessibility": 94,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 88,
+        "accessibility": 94,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/arena": {
+      "desktop": {
+        "performance": 72,
+        "accessibility": 83,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 90,
+        "accessibility": 83,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/guard/c6d699d5a2ed": {
+      "desktop": {
+        "performance": 73,
+        "accessibility": 94,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 75,
+        "accessibility": 94,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/attack": {
+      "desktop": {
+        "performance": 99,
+        "accessibility": 88,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 96,
+        "accessibility": 88,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/register": {
+      "desktop": {
+        "performance": 100,
+        "accessibility": 89,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 98,
+        "accessibility": 89,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/leaderboard": {
+      "desktop": {
+        "performance": 99,
+        "accessibility": 93,
+        "bestPractices": 96,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 96,
+        "accessibility": 93,
+        "bestPractices": 96,
+        "seo": 91
+      }
+    },
+    "/gate": {
+      "desktop": {
+        "performance": 99,
+        "accessibility": 88,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 98,
+        "accessibility": 88,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/evidence": {
+      "desktop": {
+        "performance": 98,
+        "accessibility": 94,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 98,
+        "accessibility": 95,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/wallet": {
+      "desktop": {
+        "performance": 100,
+        "accessibility": 95,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 98,
+        "accessibility": 95,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    }
+  }
+}

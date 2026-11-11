@@ -14,6 +14,9 @@ const ALLOWED_HASHES = new Set([
   '0x8c7cf7754804996df19d8e355df3f01b28ac5f64a22655f96a9857afdf25fba0'.toLowerCase(), // Arena deploy
   '0xbabc4708a844890d1b25ddc9c263ed956c6e08753772682dcec38c110c206f21'.toLowerCase(), // Gate deploy
   '0xee2fcce3cb68115d0774f785ef1a33d808d10cb781d82fe0420c3b4793086c10'.toLowerCase(), // Superseded deploy
+  '0x4194687a8edff116798eac748ec0ab50eaaa42180c876419a1e6b1a127220b3f'.toLowerCase(), // Step 0c register_guard tx
+  '0x6d9bc8690a634218b5bd0dd2cdc8221408f12a00a3cc56a6bf4dc60dd148a090'.toLowerCase(), // Step 0c attempt_breach tx
+  '0x42fa431930e6eb8554efcc1b9d9cdecc2eaee19741d05566edec705a0f1bdaa3'.toLowerCase(), // Step 0c guard_gate_ask tx
 ]);
 
 const rootDir = process.cwd();

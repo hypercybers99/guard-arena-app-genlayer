@@ -78,7 +78,7 @@ export const GuardCard: React.FC<GuardCardProps> = ({ guard }) => {
               )}
               <button
                 onClick={() => setShowToken(!showToken)}
-                className="text-arena-muted hover:text-white p-1 rounded transition-colors"
+                className="text-arena-muted hover:text-white p-1 rounded transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
                 title={showToken ? 'Hide token' : 'Reveal forbidden token'}
                 aria-label={showToken ? 'Hide token' : 'Reveal forbidden token'}
               >
@@ -86,7 +86,7 @@ export const GuardCard: React.FC<GuardCardProps> = ({ guard }) => {
               </button>
             </div>
           </div>
-          <p className="text-[10px] text-arena-muted/80 leading-normal px-1">
+          <p className="text-[10px] text-slate-300 leading-normal px-1">
             the token is public on-chain by design on Studionet; this toggle only hides it visually
           </p>
         </div>
@@ -94,7 +94,7 @@ export const GuardCard: React.FC<GuardCardProps> = ({ guard }) => {
         {/* Attempt Counters */}
         <div className="grid grid-cols-5 gap-2 text-center text-xs py-2 border-y border-arena-border/50 mb-4">
           <div>
-            <div className="text-arena-muted text-[10px] uppercase">Attempts</div>
+            <div className="text-slate-300 text-[10px] uppercase">Attempts</div>
             <div className="font-bold text-white mt-0.5">{guard.attempts_total}</div>
           </div>
           <div>
@@ -120,14 +120,14 @@ export const GuardCard: React.FC<GuardCardProps> = ({ guard }) => {
       <div className="flex items-center gap-2 pt-2">
         <Link
           to={`/attack/${guard.guard_id}`}
-          className="flex-1 bg-arena-primary hover:bg-arena-primaryHover text-white text-xs font-semibold py-2 px-3 rounded-lg text-center flex items-center justify-center gap-1.5 transition-colors"
+          className="flex-1 bg-arena-primary hover:bg-arena-primaryHover text-white text-xs font-semibold py-2 px-3 rounded-lg text-center flex items-center justify-center gap-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
         >
           <Swords className="w-3.5 h-3.5" />
           <span>Launch Attack</span>
         </Link>
         <Link
           to={`/guard/${guard.guard_id}`}
-          className="bg-arena-surface hover:bg-arena-border text-arena-text text-xs font-medium py-2 px-3 rounded-lg border border-arena-border flex items-center gap-1 transition-colors"
+          className="bg-arena-surface hover:bg-arena-border text-arena-text text-xs font-medium py-2 px-3 rounded-lg border border-arena-border flex items-center gap-1 transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
         >
           <span>Detail</span>
           <ChevronRight className="w-3.5 h-3.5" />

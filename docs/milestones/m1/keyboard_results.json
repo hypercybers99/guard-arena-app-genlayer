@@ -1,0 +1,174 @@
+{
+  "testedAt": "2026-11-11T04:03:12.532Z",
+  "totalInteractions": 31,
+  "passedChecks": 31,
+  "failedChecks": 0,
+  "checks": [
+    {
+      "name": "Skip link receives first Tab focus",
+      "passed": true,
+      "detail": "Focused: {\"tagName\":\"A\",\"href\":\"#main-content\",\"text\":\"Skip to content\"}"
+    },
+    {
+      "name": "Skip link moves focus or hash to #main-content",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Guided Tour opens automatically when not dismissed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Modal contains focusable elements",
+      "passed": true,
+      "detail": "Found 3 focusable elements"
+    },
+    {
+      "name": "Shift+Tab wraps within modal boundary",
+      "passed": true,
+      "detail": "Active: \"Next\""
+    },
+    {
+      "name": "Tab wraps within modal boundary (Focus Trap)",
+      "passed": true,
+      "detail": "Active: \"Close dialog\""
+    },
+    {
+      "name": "Next button advances tour to step 2",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Back button returns tour to step 1",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Escape key closes Guided Tour modal",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Header Tour button opens modal via Enter key",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Close button restores focus to Header Tour button",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Footer Tour button opens modal via Enter key",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Escape restores focus to Footer Tour button",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "0 GEN Guide opens via keyboard trigger",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Funds Guide displays proper title",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Funds Guide contains focusable elements",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Funds Guide traps Shift+Tab within modal",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Funds Guide traps Tab within modal",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Escape closes Funds Guide and restores focus",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Tab navigates from name to token control",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Attack textarea operable via keyboard with character counter",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "GuardGate message input operable via keyboard",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Route Landing has keyboard navigable controls (23)",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Route Arena has keyboard navigable controls (24)",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Route Leaderboard has keyboard navigable controls (20)",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Route Register has keyboard navigable controls (25)",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Route Attack has keyboard navigable controls (22)",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Route GateDemo has keyboard navigable controls (22)",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Route Evidence has keyboard navigable controls (31)",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Route GuardDetail has keyboard navigable controls (20)",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "Route Wallet has keyboard navigable controls (27)",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "routeTabCounts": {
+    "Landing": 23,
+    "Arena": 24,
+    "Leaderboard": 20,
+    "Register": 25,
+    "Attack": 22,
+    "GateDemo": 22,
+    "Evidence": 31,
+    "GuardDetail": 20,
+    "Wallet": 27
+  }
+}

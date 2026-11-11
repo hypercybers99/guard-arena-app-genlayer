@@ -4,5 +4,6 @@ dist
 .env
 .env.*
 *.log
-
-.vercel
+*.zip
+docs/milestones/m1/raw_lighthouse/
+temp_*.json

@@ -7,13 +7,16 @@ import {
   APP_REPO_URL,
   getExplorerAddressUrl,
 } from '../config/contracts';
-import { ExternalLink, ShieldCheck, Code, Github } from 'lucide-react';
+import { useUI } from '../context/UIContext';
+import { ExternalLink, ShieldCheck, Code, Github, Compass, Coins } from 'lucide-react';
 
 export const Footer: React.FC = () => {
+  const { openTour, openFundsGuide } = useUI();
+
   return (
     <footer className="bg-arena-surface border-t border-arena-border mt-auto">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 text-sm">
           {/* Column 1: Network & Architecture */}
           <div>
             <div className="flex items-center gap-2 text-white font-semibold mb-2">
@@ -38,7 +41,7 @@ export const Footer: React.FC = () => {
                   href={getExplorerAddressUrl(GUARD_ARENA_ADDRESS)}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-arena-accent hover:underline inline-flex items-center gap-1"
+                  className="text-arena-accent hover:underline inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-arena-accent rounded focus:outline-none"
                 >
                   {GUARD_ARENA_ADDRESS.slice(0, 8)}...{GUARD_ARENA_ADDRESS.slice(-6)}
                   <ExternalLink className="w-3 h-3" />
@@ -50,7 +53,7 @@ export const Footer: React.FC = () => {
                   href={getExplorerAddressUrl(GUARD_GATE_ADDRESS)}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-arena-accent hover:underline inline-flex items-center gap-1"
+                  className="text-arena-accent hover:underline inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-arena-accent rounded focus:outline-none"
                 >
                   {GUARD_GATE_ADDRESS.slice(0, 8)}...{GUARD_GATE_ADDRESS.slice(-6)}
                   <ExternalLink className="w-3 h-3" />
@@ -59,7 +62,37 @@ export const Footer: React.FC = () => {
             </div>
           </div>
 
-          {/* Column 3: Repositories */}
+          {/* Column 3: Platform Help & Onboarding */}
+          <div>
+            <div className="flex items-center gap-2 text-white font-semibold mb-2">
+              <Compass className="w-4 h-4 text-arena-accent" />
+              <span>Platform Guides</span>
+            </div>
+            <div className="space-y-2 text-xs">
+              <div>
+                <button
+                  type="button"
+                  onClick={openTour}
+                  className="text-arena-muted hover:text-white inline-flex items-center gap-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent rounded focus:outline-none"
+                >
+                  <Compass className="w-3.5 h-3.5 text-arena-accent" />
+                  <span>Take the Guided Tour</span>
+                </button>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  onClick={openFundsGuide}
+                  className="text-emerald-400 hover:text-emerald-300 inline-flex items-center gap-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent rounded focus:outline-none"
+                >
+                  <Coins className="w-3.5 h-3.5" />
+                  <span>Zero-Balance Gas Guide (0 GEN)</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 4: Repositories */}
           <div>
             <div className="flex items-center gap-2 text-white font-semibold mb-2">
               <Github className="w-4 h-4 text-arena-accent" />
@@ -71,7 +104,7 @@ export const Footer: React.FC = () => {
                   href={CONTRACT_REPO_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-arena-muted hover:text-white inline-flex items-center gap-1 transition-colors"
+                  className="text-arena-muted hover:text-white inline-flex items-center gap-1 transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent rounded focus:outline-none"
                 >
                   Contract Repo (guard-arena-genlayer)
                   <ExternalLink className="w-3 h-3" />
@@ -82,7 +115,7 @@ export const Footer: React.FC = () => {
                   href={APP_REPO_URL}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-arena-muted hover:text-white inline-flex items-center gap-1 transition-colors"
+                  className="text-arena-muted hover:text-white inline-flex items-center gap-1 transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent rounded focus:outline-none"
                 >
                   dApp Repo (guard-arena-app-genlayer)
                   <ExternalLink className="w-3 h-3" />

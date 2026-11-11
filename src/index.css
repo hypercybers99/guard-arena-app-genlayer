@@ -53,7 +53,13 @@
 
 
 /* Mobile responsive safeguards */
-html, body, #root {
+html, body, #app-root, #modal-root {
   min-width: 320px;
   max-width: 100%;
+}
+
+/* Global focus-visible outlines */
+:focus-visible {
+  outline: 2px solid #38BDF8;
+  outline-offset: 2px;
 }

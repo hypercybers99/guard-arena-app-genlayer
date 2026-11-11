@@ -16,6 +16,9 @@
     "check:reference": "node scripts/check_reference_contract.mjs",
     "verify:bundle": "node scripts/verify_bundle.mjs",
     "test:e2e": "node tests/ui_production.mjs",
+    "test:occlusion": "node scripts/test_occlusion.mjs",
+    "test:keyboard": "node scripts/test_keyboard.mjs",
+    "test:axe": "node scripts/test_axe.mjs",
     "check": "npm run check:reference && npm run build && npm run test && npm run scan:ascii && npm run scan:banned && npm run scan:secrets && npm run check:address && npm run verify:bundle"
   },
   "dependencies": {
@@ -26,6 +29,7 @@
     "react-router-dom": "^7.1.5"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@playwright/test": "^1.49.0",
     "@types/node": "^22.10.7",
     "@types/react": "^19.0.7",

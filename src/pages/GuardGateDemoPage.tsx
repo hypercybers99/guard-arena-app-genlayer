@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   getAllGuards,
   askGuardGate,
@@ -6,10 +6,16 @@ import {
   type GateReplyRecord,
   type TxProgressUpdate,
 } from '../services/contractService';
+import {
+  VALIDATION_LIMITS,
+  validateGuardGateAsk,
+  isAsciiOnly,
+} from '../lib/preWriteValidation';
 import { useWallet } from '../context/WalletContext';
 import { ConsensusProgress } from '../components/ConsensusProgress';
+import { FundsHelpBadge } from '../components/FundsHelpBadge';
 import { GUARD_GATE_ADDRESS } from '../config/contracts';
-import { Cpu, ShieldCheck, Filter, Send, Loader2, Sparkles, AlertCircle } from 'lucide-react';
+import { Cpu, ShieldCheck, Send, Loader2, Sparkles, AlertCircle } from 'lucide-react';
 
 export const GuardGateDemoPage: React.FC = () => {
   const { account } = useWallet();
@@ -57,11 +63,22 @@ export const GuardGateDemoPage: React.FC = () => {
     loadGuards();
   }, []);
 
-  const selectedGuard = activeGuards.find((g) => g.guard_id === selectedGuardId);
+  const selectedGuard = activeGuards.find((g) => g.guard_id === selectedGuardId) || null;
+
+  // Pre-write validation
+  const validation = useMemo(() => {
+    return validateGuardGateAsk({
+      guardId: selectedGuardId,
+      message: userMessage,
+      guard: selectedGuard,
+    });
+  }, [selectedGuardId, userMessage, selectedGuard]);
+
+  const isMsgAscii = isAsciiOnly(userMessage);
 
   const handleAsk = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!account || !selectedGuardId || !userMessage.trim() || submitting) return;
+    if (!account || !selectedGuardId || submitting || !validation.isValid) return;
 
     setSubmitting(true);
     setTxProgress({ stage: 'signing' });
@@ -89,20 +106,25 @@ export const GuardGateDemoPage: React.FC = () => {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
-      <div className="border-b border-arena-border pb-4">
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
-          <Cpu className="w-8 h-8 text-arena-accent" />
-          <span>GuardGate Consumer Demo</span>
-        </h1>
-        <p className="text-sm text-arena-muted mt-1">
-          Interactive demo showing cross-contract reuse of active arena policies with deterministic output filtering.
-        </p>
+      <div className="border-b border-arena-border pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white flex items-center gap-3">
+            <Cpu className="w-8 h-8 text-arena-accent" aria-hidden="true" />
+            <span>GuardGate Consumer Demo</span>
+          </h1>
+          <p className="text-sm text-arena-muted mt-1">
+            Interactive demo showing cross-contract reuse of active arena policies with deterministic output filtering.
+          </p>
+        </div>
+        <div className="shrink-0">
+          <FundsHelpBadge variant="pill" />
+        </div>
       </div>
 
       {/* Explanation Banner */}
       <div className="bg-arena-card border border-arena-border rounded-xl p-5 space-y-2 text-xs text-slate-300 leading-relaxed shadow-sm">
         <div className="font-semibold text-white flex items-center gap-2 text-sm">
-          <Sparkles className="w-4 h-4 text-arena-accent" />
+          <Sparkles className="w-4 h-4 text-arena-accent" aria-hidden="true" />
           <span>Cross-Contract Guard Protection</span>
         </div>
         <p>
@@ -113,12 +135,12 @@ export const GuardGateDemoPage: React.FC = () => {
       <form onSubmit={handleAsk} className="bg-arena-card border border-arena-border rounded-xl p-6 space-y-6 shadow-md">
         {/* Guard Selector */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-arena-muted">
+          <label htmlFor="gate-guard-select" className="block text-xs font-semibold uppercase tracking-wider text-arena-muted">
             Select Active Guard to Consult
           </label>
           {loadingGuards ? (
             <div className="flex items-center gap-2 text-xs text-arena-muted">
-              <Loader2 className="w-4 h-4 animate-spin text-arena-accent" />
+              <Loader2 className="w-4 h-4 animate-spin text-arena-accent" aria-hidden="true" />
               <span>Loading active guards...</span>
             </div>
           ) : activeGuards.length === 0 ? (
@@ -127,10 +149,12 @@ export const GuardGateDemoPage: React.FC = () => {
             </div>
           ) : (
             <select
+              id="gate-guard-select"
+              aria-label="Select active guard for GuardGate verification"
               value={selectedGuardId}
               onChange={(e) => setSelectedGuardId(e.target.value)}
               disabled={submitting}
-              className="w-full bg-arena-surface border border-arena-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-arena-primary font-mono cursor-pointer"
+              className="w-full bg-arena-surface border border-arena-border rounded-lg px-3.5 py-2.5 text-sm text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-arena-accent font-mono cursor-pointer"
             >
               {activeGuards.map((g) => (
                 <option key={g.guard_id} value={g.guard_id} className="bg-arena-card">
@@ -138,6 +162,12 @@ export const GuardGateDemoPage: React.FC = () => {
                 </option>
               ))}
             </select>
+          )}
+          {validation.errors.guardId && (
+            <p className="text-xs text-red-400 flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" />
+              <span>{validation.errors.guardId}</span>
+            </p>
           )}
         </div>
 
@@ -151,18 +181,38 @@ export const GuardGateDemoPage: React.FC = () => {
 
         {/* Query Input */}
         <div className="space-y-1.5">
-          <label className="block text-xs font-semibold uppercase tracking-wider text-arena-muted">
-            Your Question / Prompt
-          </label>
+          <div className="flex items-center justify-between">
+            <label htmlFor="gate-message-input" className="block text-xs font-semibold uppercase tracking-wider text-arena-muted">
+              Your Question / Prompt (1-{VALIDATION_LIMITS.MAX_MESSAGE_CHARS} ASCII Characters)
+            </label>
+            <span className="text-xs font-mono text-arena-muted">
+              {userMessage.length} / {VALIDATION_LIMITS.MAX_MESSAGE_CHARS}
+            </span>
+          </div>
           <textarea
+            id="gate-message-input"
             value={userMessage}
-            onChange={(e) => setUserMessage(e.target.value.slice(0, 300))}
+            onChange={(e) => setUserMessage(e.target.value.slice(0, VALIDATION_LIMITS.MAX_MESSAGE_CHARS))}
             placeholder="Ask anything, or attempt to trick the guard..."
             rows={3}
             disabled={submitting}
-            className="w-full bg-arena-surface border border-arena-border rounded-lg p-3 text-sm text-white placeholder-arena-muted focus:outline-none focus:border-arena-primary font-mono resize-none"
+            className={`w-full bg-arena-surface border rounded-lg p-3 text-sm text-white placeholder-arena-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-arena-accent font-mono resize-none ${
+              validation.errors.message ? 'border-red-500' : 'border-arena-border'
+            }`}
             required
           />
+          {!isMsgAscii && (
+            <p className="text-xs text-red-400 flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" />
+              <span>Prompt must contain pure ASCII characters only.</span>
+            </p>
+          )}
+          {validation.errors.message && isMsgAscii && (
+            <p className="text-xs text-red-400 flex items-center gap-1">
+              <AlertCircle className="w-3.5 h-3.5" />
+              <span>{validation.errors.message}</span>
+            </p>
+          )}
         </div>
 
         {/* Real-time Consensus Progress */}
@@ -176,17 +226,22 @@ export const GuardGateDemoPage: React.FC = () => {
         {/* Submit */}
         <button
           type="submit"
-          disabled={submitting || !userMessage.trim() || activeGuards.length === 0}
-          className="w-full bg-arena-primary hover:bg-arena-primaryHover disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/20"
+          disabled={submitting || !validation.isValid || activeGuards.length === 0}
+          title={
+            !validation.isValid
+              ? Object.values(validation.errors)[0] || 'Please fix form errors before submitting'
+              : 'Sign and broadcast query to GuardGate on Studionet'
+          }
+          className="w-full bg-arena-primary hover:bg-arena-primaryHover disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 px-4 rounded-lg flex items-center justify-center gap-2 transition-all shadow-lg shadow-blue-600/20 focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
         >
           {submitting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-4 h-4 animate-spin" aria-hidden="true" />
               <span>Querying Guard Through GuardGate...</span>
             </>
           ) : (
             <>
-              <Send className="w-4 h-4" />
+              <Send className="w-4 h-4" aria-hidden="true" />
               <span>Ask Guard (via GuardGate)</span>
             </>
           )}
@@ -201,7 +256,7 @@ export const GuardGateDemoPage: React.FC = () => {
         <div className="bg-arena-card border border-arena-border rounded-xl p-6 space-y-4 shadow-lg animate-fade-in">
           <div className="flex items-center justify-between border-b border-arena-border pb-3">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-arena-accent" />
+              <ShieldCheck className="w-5 h-5 text-arena-accent" aria-hidden="true" />
               <span className="font-bold text-white text-sm">GuardGate Filter Response</span>
             </div>
             {/* Filter Status Badge */}

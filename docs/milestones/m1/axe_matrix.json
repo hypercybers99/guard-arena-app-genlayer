@@ -1,0 +1,168 @@
+{
+  "testedAt": "2026-11-11T04:06:30.053Z",
+  "viewports": [
+    1440,
+    500,
+    390
+  ],
+  "totalScans": 33,
+  "totalViolations": 0,
+  "routes": {
+    "Landing": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "Arena": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "GuardDetail": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "Attack": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "Register": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "Leaderboard": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "GateDemo": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "Evidence": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "Wallet": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    }
+  },
+  "modals": {
+    "GuidedTour": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "FundsGuide": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    }
+  }
+}

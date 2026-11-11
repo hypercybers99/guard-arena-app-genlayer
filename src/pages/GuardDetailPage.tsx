@@ -8,9 +8,12 @@ import {
   type AttemptRecord,
   type TxProgressUpdate,
 } from '../services/contractService';
+import { validateReverifyAttempt } from '../lib/preWriteValidation';
 import { useWallet } from '../context/WalletContext';
 import { ConsensusProgress } from '../components/ConsensusProgress';
+import { FundsHelpBadge } from '../components/FundsHelpBadge';
 import { getExplorerTxUrl } from '../config/contracts';
+import { CardSkeleton } from '../components/Skeleton';
 import {
   Shield,
   ShieldAlert,
@@ -91,21 +94,26 @@ export const GuardDetailPage: React.FC = () => {
     descendants: [],
   });
   const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [reverifyProgress, setReverifyProgress] = useState<TxProgressUpdate>({ stage: 'idle' });
   const [reverifyingAttemptN, setReverifyingAttemptN] = useState<number | null>(null);
 
   const loadData = async () => {
     if (!id) return;
     setLoading(true);
+    setFetchError(null);
     try {
       const g = await getGuard(id);
-      setGuard(g);
-      if (g) {
+      if (!g) {
+        setFetchError(`Unable to load guard "${id}" from RPC. The network query did not return guard data.`);
+      } else {
+        setGuard(g);
         const lin = await getLineage(id);
         setLineage(lin);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to load guard detail:', err);
+      setFetchError(err.message || 'RPC communication error while loading guard state from Studionet.');
     } finally {
       setLoading(false);
     }
@@ -117,6 +125,15 @@ export const GuardDetailPage: React.FC = () => {
 
   const handleReverify = async (attemptN: number) => {
     if (!guard || !account) return;
+    const v = validateReverifyAttempt(guard, attemptN);
+    if (!v.isValid) {
+      setReverifyProgress({
+        stage: 'reverted',
+        error: v.error || 'Re-verification validation failed',
+      });
+      return;
+    }
+
     setReverifyingAttemptN(attemptN);
     try {
       const res = await reverifyAttempt(account, guard.guard_id, attemptN, (u) => {
@@ -134,23 +151,44 @@ export const GuardDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-20 text-center space-y-3">
-        <Loader2 className="w-8 h-8 text-arena-accent animate-spin mx-auto" />
-        <p className="text-sm text-arena-muted font-mono">Fetching guard state from contract...</p>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+        <h1 className="sr-only">Loading Guard Details</h1>
+        <div className="flex items-center gap-2 text-arena-muted text-xs font-mono">
+          <Loader2 className="w-4 h-4 animate-spin text-arena-accent" />
+          <span>Querying guard state from GenLayer Studionet (Preview)...</span>
+        </div>
+        <CardSkeleton count={2} />
       </div>
     );
   }
 
-  if (!guard) {
+  if (fetchError || !guard) {
     return (
-      <div className="max-w-4xl mx-auto px-4 py-16 text-center space-y-4">
-        <AlertCircle className="w-12 h-12 text-rose-400 mx-auto" />
-        <h2 className="text-2xl font-bold text-white">Guard Not Found</h2>
-        <p className="text-sm text-arena-muted">Guard ID "{id}" does not exist in GuardArena.</p>
-        <Link to="/arena" className="text-arena-accent hover:underline text-sm inline-flex items-center gap-1">
-          <ChevronLeft className="w-4 h-4" />
-          Back to Arena
-        </Link>
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center space-y-4" role="alert">
+        <div className="w-12 h-12 mx-auto rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+          <AlertCircle className="w-6 h-6" />
+        </div>
+        <h1 className="text-xl font-bold text-white">Guard Query Incomplete</h1>
+        <p className="text-xs text-arena-muted max-w-md mx-auto leading-relaxed">
+          {fetchError || `Unable to retrieve record for guard ID "${id}".`}
+        </p>
+        <div className="pt-2 flex items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={loadData}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-arena-primary text-white hover:bg-arena-primaryHover transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>Retry Query</span>
+          </button>
+          <Link
+            to="/arena"
+            className="text-arena-accent hover:underline text-xs inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-arena-accent rounded px-2 py-1 focus:outline-none"
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+            <span>Back to Arena</span>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -163,7 +201,7 @@ export const GuardDetailPage: React.FC = () => {
       <div>
         <Link
           to="/arena"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-arena-muted hover:text-white transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-arena-muted hover:text-white transition-colors focus-visible:ring-2 focus-visible:ring-arena-accent rounded focus:outline-none"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Back to Arena</span>
@@ -198,7 +236,7 @@ export const GuardDetailPage: React.FC = () => {
 
           <Link
             to={`/attack/${guard.guard_id}`}
-            className="inline-flex items-center justify-center gap-2 bg-arena-primary hover:bg-arena-primaryHover text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-md shrink-0"
+            className="inline-flex items-center justify-center gap-2 bg-arena-primary hover:bg-arena-primaryHover text-white px-5 py-2.5 rounded-lg text-sm font-semibold transition-all shadow-md shrink-0 focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
           >
             <Swords className="w-4 h-4" />
             <span>Launch Attack</span>
@@ -259,7 +297,7 @@ export const GuardDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Lineage Tree Section (parent -> this -> children) */}
+      {/* Lineage Tree Section */}
       <div className="bg-arena-card border border-arena-border rounded-xl p-6 space-y-4 shadow-sm">
         <h2 className="text-lg font-bold text-white flex items-center gap-2">
           <GitFork className="w-5 h-5 text-arena-accent" />
@@ -271,7 +309,7 @@ export const GuardDetailPage: React.FC = () => {
           {guard.parent_guard_id ? (
             <Link
               to={`/guard/${guard.parent_guard_id}`}
-              className="bg-arena-surface hover:bg-arena-border border border-arena-border p-3 rounded-lg text-center w-full sm:w-auto min-w-[140px] text-arena-accent hover:underline"
+              className="bg-arena-surface hover:bg-arena-border border border-arena-border p-3 rounded-lg text-center w-full sm:w-auto min-w-[140px] text-arena-accent hover:underline focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
             >
               <div className="text-arena-muted text-[10px] uppercase">Parent Guard</div>
               <div className="font-bold">{guard.parent_guard_id}</div>
@@ -283,7 +321,7 @@ export const GuardDetailPage: React.FC = () => {
             </div>
           )}
 
-          <ArrowRight className="w-4 h-4 text-arena-muted rotate-90 sm:rotate-0 shrink-0" />
+          <ArrowRight className="w-4 h-4 text-arena-muted rotate-90 sm:rotate-0 shrink-0" aria-hidden="true" />
 
           {/* Current Guard */}
           <div className="bg-arena-primary/20 border-2 border-arena-primary p-3 rounded-lg text-center w-full sm:w-auto min-w-[140px] text-white">
@@ -291,7 +329,7 @@ export const GuardDetailPage: React.FC = () => {
             <div className="font-extrabold">{guard.guard_id}</div>
           </div>
 
-          <ArrowRight className="w-4 h-4 text-arena-muted rotate-90 sm:rotate-0 shrink-0" />
+          <ArrowRight className="w-4 h-4 text-arena-muted rotate-90 sm:rotate-0 shrink-0" aria-hidden="true" />
 
           {/* Children */}
           {lineage.descendants && lineage.descendants.length > 0 ? (
@@ -300,7 +338,7 @@ export const GuardDetailPage: React.FC = () => {
                 <Link
                   key={childId}
                   to={`/guard/${childId}`}
-                  className="bg-arena-surface hover:bg-arena-border border border-arena-border p-3 rounded-lg text-center min-w-[140px] text-emerald-400 hover:underline"
+                  className="bg-arena-surface hover:bg-arena-border border border-arena-border p-3 rounded-lg text-center min-w-[140px] text-emerald-400 hover:underline focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
                 >
                   <div className="text-arena-muted text-[10px] uppercase">Child Guard</div>
                   <div className="font-bold">{childId}</div>
@@ -415,26 +453,28 @@ export const GuardDetailPage: React.FC = () => {
                   {/* Consensus Derived Integrity */}
                   <AttemptIntegrityBox attempt={att} />
 
-                  {/* Reverify Action Button (Big Callout for BREACHED_UNCONFIRMED) */}
+                  {/* Reverify Action Button */}
                   {isUnconfirmed && (
                     <div className="mt-3 pt-3 border-t border-amber-500/30 flex flex-col sm:flex-row items-center justify-between gap-3">
-                      <div className="text-xs text-amber-200">
-                        This breach is unconfirmed. A second consensus verification round is required to confirm the breach or mark it FLAKY.
+                      <div className="text-xs text-amber-200 space-y-1">
+                        <div>This breach is unconfirmed. A second consensus verification round is required to confirm the breach or mark it FLAKY.</div>
+                        <FundsHelpBadge variant="compact" label="0 GEN gas fee info" />
                       </div>
                       <div className="flex flex-col items-end gap-1 w-full sm:w-auto">
                         <button
+                          type="button"
                           onClick={() => handleReverify(att.n)}
                           disabled={reverifyingAttemptN === att.n}
-                          className="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-lg shadow-amber-500/20 shrink-0"
+                          className="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-black font-bold text-xs px-4 py-2 rounded-lg flex items-center justify-center gap-1.5 transition-colors shadow-lg shadow-amber-500/20 shrink-0 focus-visible:ring-2 focus-visible:ring-arena-accent focus:outline-none"
                         >
                           {reverifyingAttemptN === att.n ? (
                             <>
-                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
                               <span>Re-verifying in Consensus...</span>
                             </>
                           ) : (
                             <>
-                              <RefreshCw className="w-3.5 h-3.5" />
+                              <RefreshCw className="w-3.5 h-3.5" aria-hidden="true" />
                               <span>Re-verify This Breach</span>
                             </>
                           )}
@@ -454,7 +494,7 @@ export const GuardDetailPage: React.FC = () => {
                         href={getExplorerTxUrl(att.reverify_tx)}
                         target="_blank"
                         rel="noreferrer"
-                        className="text-arena-accent hover:underline inline-flex items-center gap-1"
+                        className="text-arena-accent hover:underline inline-flex items-center gap-1 focus-visible:ring-2 focus-visible:ring-arena-accent rounded focus:outline-none"
                       >
                         {att.reverify_tx.slice(0, 10)}...{att.reverify_tx.slice(-6)}
                         <ExternalLink className="w-3 h-3" />
