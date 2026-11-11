@@ -1,8 +1,8 @@
 {
   "network": "GenLayer Studionet (Preview)",
   "chainId": 61999,
-  "verifiedAt": "2026-11-11T03:49:49.669Z",
-  "totalHashesVerified": 14,
+  "verifiedAt": "2026-11-11T04:31:46.652Z",
+  "totalHashesVerified": 17,
   "allValid66Chars": true,
   "entries": [
     {
@@ -116,6 +116,30 @@
       "action": "step0c_guard_gate_ask",
       "honestLabel": "Accepted by validators (3/5 agreed) - state applied",
       "source": "funding_measurement.json"
+    },
+    {
+      "txHash": "0x0d6670e5f8d1d470db42dc918b644637580ef19fa6b2ec0ed7acfdc76db207bb",
+      "length": 66,
+      "validFormat": true,
+      "action": "e2e_prod_register_guard",
+      "honestLabel": "Accepted by validators - state applied",
+      "source": "e2e_production_evidence.json"
+    },
+    {
+      "txHash": "0xe4db23068a9432ab4b2eb79237fc9bf79d6aa368afa3f11b6e45f252c3e96419",
+      "length": 66,
+      "validFormat": true,
+      "action": "e2e_prod_attempt_breach",
+      "honestLabel": "Accepted by validators - state applied",
+      "source": "e2e_production_evidence.json"
+    },
+    {
+      "txHash": "0x93d5ee1632fc2b57651b961c61114026911126ba2efa59a202a76778d799a989",
+      "length": 66,
+      "validFormat": true,
+      "action": "e2e_prod_guardgate_ask",
+      "honestLabel": "Accepted by validators - state applied",
+      "source": "e2e_production_evidence.json"
     }
   ]
 }

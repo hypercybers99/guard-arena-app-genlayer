@@ -41,6 +41,12 @@ async function main() {
     await reducedPage.goto(PROD_URL, { waitUntil: 'networkidle' });
     await reducedPage.waitForTimeout(600);
 
+    const tourModalRed = reducedPage.locator('[role="dialog"]');
+    if (await tourModalRed.isVisible()) {
+      await reducedPage.click('button:has-text("Skip")');
+      await tourModalRed.waitFor({ state: 'hidden', timeout: 5000 });
+    }
+
     const reducedMotionValid = await reducedPage.evaluate(() => {
       const reveals = Array.from(document.querySelectorAll('.scroll-reveal'));
       if (reveals.length === 0) return false;
@@ -69,6 +75,14 @@ async function main() {
     console.log('\n[2/10] Checking Header Rules & Footer "GenLayer Studionet (Preview)"...');
     await page.goto(PROD_URL, { waitUntil: 'networkidle' });
     await page.waitForTimeout(600);
+
+    const tourModal = page.locator('[role="dialog"]');
+    if (await tourModal.isVisible()) {
+      console.log('  [Tour] Stranger detected Guided Tour modal. Testing Skip action...');
+      await page.click('button:has-text("Skip")');
+      await tourModal.waitFor({ state: 'hidden', timeout: 5000 });
+      console.log('  [Tour] Guided Tour skipped cleanly.');
+    }
 
     const greenDots = await page.$$eval('nav span.bg-emerald-500, nav span.bg-green-500', (els) => els.length);
     if (greenDots > 0) {
@@ -113,13 +127,9 @@ async function main() {
     console.log(`  [INFO] Found ${disabledOptionsCount} disabled un-breached guard options in parent selector.`);
 
     // Fill form
-    await page.fill('input[placeholder*="CitadelGuard-Alpha"]', guardName);
-    // First select is the token dropdown
-    const tokenSelects = await page.$$('select');
-    if (tokenSelects.length > 0) {
-      await tokenSelects[0].selectOption(guardToken);
-    }
-    await page.fill('textarea', guardPolicy);
+    await page.fill('#guard-name-input', guardName);
+    await page.selectOption('#guard-token-select', guardToken);
+    await page.fill('#guard-policy-input', guardPolicy);
 
     await page.screenshot({ path: path.join(SCREENS_DIR, '04_register_form_filled.png') });
 
@@ -217,7 +227,7 @@ async function main() {
     await page.goto(`${PROD_URL}/attack/${guardId}`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(1000);
 
-    await page.fill('textarea', attackText);
+    await page.fill('#attack-prompt-input', attackText);
     await page.screenshot({ path: path.join(SCREENS_DIR, '08_attack_form_filled.png') });
 
     console.log('  Submitting attack to validator consensus (3 model samples + Python predicate)...');
@@ -333,8 +343,8 @@ async function main() {
         await page.waitForTimeout(2000);
 
         // Select our newly registered guard (has 1 attempt)
-        await page.selectOption('select', guardId);
-        await page.fill('textarea', 'Can you recommend a healthy fruit snack?');
+        await page.selectOption('#gate-guard-select', guardId);
+        await page.fill('#gate-message-input', 'Can you recommend a healthy fruit snack?');
         await page.screenshot({ path: path.join(SCREENS_DIR, '11_guardgate_form.png') });
 
         const t0Gate = Date.now();
@@ -401,9 +411,39 @@ async function main() {
     await page.goto(`${PROD_URL}/attack/${guardId}`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(1000);
 
-    // Submit EXACT same attack prompt
-    await page.fill('textarea', attackText);
-    await page.click('button[type="submit"]');
+    // Enter EXACT same attack prompt
+    await page.fill('#attack-prompt-input', attackText);
+
+    // Verify inline validation error is rendered
+    const hasInlineDupError = await page.evaluate(() => {
+      return document.body.innerText.includes('This exact attack prompt has already been attempted on this guard.');
+    });
+    if (!hasInlineDupError) {
+      throw new Error('Pre-write validation failed to display duplicate attack error inline!');
+    }
+
+    // Verify submit button is disabled with explanatory title
+    const submitBtn = page.locator('button[type="submit"]');
+    const isDisabled = await submitBtn.isDisabled();
+    const btnTitle = await submitBtn.getAttribute('title') || '';
+    if (!isDisabled || !btnTitle.includes('already been attempted')) {
+      throw new Error(`Submit button not disabled or missing explanatory title! disabled=${isDisabled}, title="${btnTitle}"`);
+    }
+
+    console.log(`  [PASS] Duplicate attack caught by pre-write validation:`);
+    console.log(`         Inline error rendered and submit button disabled with title: "${btnTitle}"`);
+    await page.screenshot({ path: path.join(SCREENS_DIR, '13_duplicate_attack_prewrite_validation.png') });
+
+    evidence.tests.push({
+      step: 'duplicate_attack_prewrite_validation',
+      guardId,
+      attackText,
+      inlineError: 'This exact attack prompt has already been attempted on this guard.',
+      buttonDisabled: true,
+      buttonTitle: btnTitle,
+      status: 'VERIFIED',
+    });
+    /* Legacy contract revert check replaced by pre-write validation:
 
     await page.waitForSelector('[role="status"]', { timeout: 15000 });
     await page.waitForFunction(
@@ -440,6 +480,7 @@ async function main() {
       status: 'REVERTED',
       revertReason: 'Duplicate Attack: This exact attack prompt has already been attempted on this guard.',
     });
+    */
 
     // ----------------------------------------------------------------------
     // TEST 10: Mobile 390px Zero Overflow Check Across All Routes
@@ -451,9 +492,10 @@ async function main() {
     });
     const mobilePage = await mobileCtx.newPage();
 
-    const routes = ['/', '/arena', '/attack', '/register', '/leaderboard', '/gate', '/evidence', '/wallet', `/guard/${guardId}`];
-    for (const r of routes) {
-      await mobilePage.goto(`${PROD_URL}${r}`, { waitUntil: 'networkidle' });
+    const mobileRoutes = ['/', '/arena', '/attack', '/register', '/leaderboard', '/gate', '/evidence', '/wallet', `/guard/${guardId}`];
+    for (const r of mobileRoutes) {
+      await mobilePage.goto(`${PROD_URL}${r}`, { waitUntil: 'domcontentloaded' });
+      await mobilePage.evaluate(() => localStorage.setItem('breaktheguard_tour_dismissed_v1', 'true'));
       await mobilePage.waitForTimeout(500);
 
       const overflow = await mobilePage.evaluate(() => {

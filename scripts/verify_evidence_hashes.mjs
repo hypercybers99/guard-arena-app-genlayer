@@ -17,11 +17,15 @@ const fundingMeasurementPath = path.join(
   'm1',
   'funding_measurement.json'
 );
+const e2eEvidencePath = path.join(process.cwd(), 'docs', 'e2e_production_evidence.json');
 const outputPath = path.join(process.cwd(), 'docs', 'evidence_verification.json');
 
 const liveData = JSON.parse(fs.readFileSync(liveEvidencePath, 'utf8'));
 const fundingData = fs.existsSync(fundingMeasurementPath)
   ? JSON.parse(fs.readFileSync(fundingMeasurementPath, 'utf8'))
+  : null;
+const e2eData = fs.existsSync(e2eEvidencePath)
+  ? JSON.parse(fs.readFileSync(e2eEvidencePath, 'utf8'))
   : null;
 
 const seenHashes = new Set();
@@ -74,6 +78,15 @@ if (liveData.gateRequests) {
 if (fundingData && fundingData.transactions) {
   for (const tx of fundingData.transactions) {
     addEntry(tx.txHash, `step0c_${tx.action}`, tx.honestLabel, 'funding_measurement.json');
+  }
+}
+
+// 6. E2E Production Evidence
+if (e2eData && e2eData.transactions) {
+  for (const tx of e2eData.transactions) {
+    if (tx.txHash) {
+      addEntry(tx.txHash, `e2e_prod_${tx.step}`, 'Accepted by validators - state applied', 'e2e_production_evidence.json');
+    }
   }
 }
 

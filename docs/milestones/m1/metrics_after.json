@@ -1,0 +1,339 @@
+{
+  "targetUrl": "https://guard-arena-app-genlayer.vercel.app",
+  "timestamp": "2026-11-11T04:11:33.931Z",
+  "theme": "dark",
+  "routesScanned": [
+    "/",
+    "/arena",
+    "/guard/c6d699d5a2ed",
+    "/attack",
+    "/register",
+    "/leaderboard",
+    "/gate",
+    "/evidence",
+    "/wallet"
+  ],
+  "viewportsScanned": [
+    1440,
+    500,
+    390
+  ],
+  "nativeDialogCount": 0,
+  "deepLinkCheck": {
+    "/guard/c6d699d5a2ed": {
+      "httpStatus": 200,
+      "loaded": true,
+      "h1": "Loading Guard Details",
+      "contentSample": "Skip to content\nBreakTheGuard\nADVERSARIAL ROBUSTNESS ARENA\nArena\nRegister Guard\nAttack\nLeaderboard\nGuardGate Demo\nEvidence\nTour\n0 GEN Ready\n0xB7f7...4"
+    },
+    "/attack/c6d699d5a2ed": {
+      "httpStatus": 200,
+      "loaded": true,
+      "h1": "Launch Adversarial Attack",
+      "contentSample": "Skip to content\nBreakTheGuard\nADVERSARIAL ROBUSTNESS ARENA\nArena\nRegister Guard\nAttack\nLeaderboard\nGuardGate Demo\nEvidence\nTour\n0 GEN Ready\n0x11C8...9"
+    }
+  },
+  "axeScan": {
+    "/": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/arena": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/guard/c6d699d5a2ed": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/attack": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/register": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/leaderboard": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/gate": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/evidence": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    },
+    "/wallet": {
+      "390": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "500": {
+        "violationsCount": 0,
+        "violations": []
+      },
+      "1440": {
+        "violationsCount": 0,
+        "violations": []
+      }
+    }
+  },
+  "keyboardCheck": {
+    "/": {
+      "interactiveControls": 23,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/arena": {
+      "interactiveControls": 25,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/guard/c6d699d5a2ed": {
+      "interactiveControls": 20,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/attack": {
+      "interactiveControls": 23,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/register": {
+      "interactiveControls": 26,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/leaderboard": {
+      "interactiveControls": 20,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/gate": {
+      "interactiveControls": 23,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/evidence": {
+      "interactiveControls": 31,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    },
+    "/wallet": {
+      "interactiveControls": 29,
+      "keyboardAccessible": true,
+      "tabNavigationVerified": true
+    }
+  },
+  "lighthouse": {
+    "/": {
+      "desktop": {
+        "performance": 96,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 89,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/arena": {
+      "desktop": {
+        "performance": 84,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 87,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/guard/c6d699d5a2ed": {
+      "desktop": {
+        "performance": 72,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 64,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/attack": {
+      "desktop": {
+        "performance": 94,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 89,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/register": {
+      "desktop": {
+        "performance": 100,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 97,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/leaderboard": {
+      "desktop": {
+        "performance": 98,
+        "accessibility": 100,
+        "bestPractices": 96,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 69,
+        "accessibility": 100,
+        "bestPractices": 96,
+        "seo": 91
+      }
+    },
+    "/gate": {
+      "desktop": {
+        "performance": 96,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 97,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/evidence": {
+      "desktop": {
+        "performance": 99,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 89,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    },
+    "/wallet": {
+      "desktop": {
+        "performance": 99,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      },
+      "mobile": {
+        "performance": 98,
+        "accessibility": 100,
+        "bestPractices": 100,
+        "seo": 91
+      }
+    }
+  }
+}
